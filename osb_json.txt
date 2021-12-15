@@ -1,0 +1,569 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "REDMasterdataQuery",
+    "contact": {}
+  },
+  "host": "esb.dev.imcplus.net:443",
+  "basePath": "/GAI34_OSB/SOAGovernance/REDMasterdataQueryV2",
+  "securityDefinitions": {},
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/xml"
+  ],
+  "produces": [
+    "application/xml"
+  ],
+  "paths": {
+    "/querySolution": {
+      "post": {
+        "description": "The REDMasterdataQuery provides all necessary operations for reading information necessary for Serviceworkz new service wizard\n        from RED database.  \n        This verion (V2) uses standard header V4",
+        "summary": "querySolution",
+        "tags": [
+          "REDMasterdataQueryBinding"
+        ],
+        "operationId": "querySolution",
+        "deprecated": false,
+        "produces": [
+          "application/xml"
+        ],
+        "consumes": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/querySolutionRequestMessage"
+            }
+          },
+          {
+            "name": "stdSecurityHeader",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "stdRequestHeader",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the response",
+            "schema": {
+              "$ref": "#/definitions/querySolutionResponseMessage"
+            },
+            "headers": {
+              "stdResponsetHeader": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/querySolFun": {
+      "post": {
+        "summary": "querySolFun",
+        "tags": [
+          "REDMasterdataQueryBinding"
+        ],
+        "operationId": "querySolFun",
+        "deprecated": false,
+        "produces": [
+          "application/xml"
+        ],
+        "consumes": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/querySolFunRequestMessage"
+            }
+          },
+          {
+            "name": "stdSecurityHeader",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "stdRequestHeader",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the response",
+            "schema": {
+              "$ref": "#/definitions/querySolFunResponseMessage"
+            },
+            "headers": {
+              "stdResponsetHeader": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/queryUser": {
+      "post": {
+        "summary": "queryUser",
+        "tags": [
+          "REDMasterdataQueryBinding"
+        ],
+        "operationId": "queryUser",
+        "deprecated": false,
+        "produces": [
+          "application/xml"
+        ],
+        "consumes": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/queryUserRequestMessage"
+            }
+          },
+          {
+            "name": "stdSecurityHeader",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "stdRequestHeader",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the response",
+            "schema": {
+              "$ref": "#/definitions/queryUserResponseMessage"
+            },
+            "headers": {
+              "stdResponsetHeader": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ping": {
+      "post": {
+        "summary": "ping",
+        "tags": [
+          "REDMasterdataQueryBinding"
+        ],
+        "operationId": "ping",
+        "deprecated": false,
+        "produces": [
+          "application/xml"
+        ],
+        "consumes": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/pingRequestMessage"
+            }
+          },
+          {
+            "name": "stdSecurityHeader",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "stdRequestHeader",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the response",
+            "schema": {
+              "$ref": "#/definitions/pingResponseMessage"
+            },
+            "headers": {
+              "stdResponsetHeader": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "querySolutionRequest": {
+      "title": "querySolutionRequest",
+      "description": "",
+      "xml": {
+        "name": "querySolutionRequest",
+        "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+        "prefix": "tns",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "searchCriteria": {
+          "description": "Field-name: searchCriteria\n                                Type-name: QuerySolutionInput\n                                Type-definition: QuerySolutionInput\n                                \n                                reads solution information from RED which match the defined search criteria.",
+          "xml": {
+            "name": "searchCriteria",
+            "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+            "prefix": "tns",
+            "attribute": false,
+            "wrapped": false
+          },
+          "type": "string"
+        }
+      },
+      "required": [
+        "searchCriteria"
+      ]
+    },
+    "querySolutionResponse": {
+      "title": "querySolutionResponse",
+      "description": "",
+      "xml": {
+        "name": "querySolutionResponse",
+        "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+        "prefix": "tns",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "result": {
+          "description": "Field-name: result\n                                Type-name: QuerySolutionResult\n                                Type-definition: QuerySolutionResult",
+          "xml": {
+            "name": "result",
+            "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+            "prefix": "tns",
+            "attribute": false,
+            "wrapped": false
+          },
+          "type": "string"
+        }
+      },
+      "required": [
+        "result"
+      ]
+    },
+    "querySolFunRequest": {
+      "title": "querySolFunRequest",
+      "description": "",
+      "xml": {
+        "name": "querySolFunRequest",
+        "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+        "prefix": "tns",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "searchCriteria": {
+          "description": "Field-name: searchCriteria\n                                Type-name: QuerySolFunInput\n                                Type-definition: QuerySolFunInput\n                                \n                                reads solution function information from RED which match the defined search criteria.",
+          "xml": {
+            "name": "searchCriteria",
+            "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+            "prefix": "tns",
+            "attribute": false,
+            "wrapped": false
+          },
+          "type": "string"
+        }
+      },
+      "required": [
+        "searchCriteria"
+      ]
+    },
+    "querySolFunResponse": {
+      "title": "querySolFunResponse",
+      "description": "",
+      "xml": {
+        "name": "querySolFunResponse",
+        "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+        "prefix": "tns",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "result": {
+          "description": "Field-name: result\n                                Type-name: QuerySolFunResult\n                                Type-definition: QuerySolFunResult",
+          "xml": {
+            "name": "result",
+            "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+            "prefix": "tns",
+            "attribute": false,
+            "wrapped": false
+          },
+          "type": "string"
+        }
+      },
+      "required": [
+        "result"
+      ]
+    },
+    "queryUserRequest": {
+      "title": "queryUserRequest",
+      "description": "",
+      "xml": {
+        "name": "queryUserRequest",
+        "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+        "prefix": "tns",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "searchCriteria": {
+          "description": "Field-name: searchCriteria\n                                Type-name: QueryUserInput\n                                Type-definition: QueryUserInput\n                                \n                                reads user information from RED which match the defined search criteria.",
+          "xml": {
+            "name": "searchCriteria",
+            "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+            "prefix": "tns",
+            "attribute": false,
+            "wrapped": false
+          },
+          "type": "string"
+        }
+      },
+      "required": [
+        "searchCriteria"
+      ]
+    },
+    "queryUserResponse": {
+      "title": "queryUserResponse",
+      "description": "",
+      "xml": {
+        "name": "queryUserResponse",
+        "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+        "prefix": "tns",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "result": {
+          "description": "Field-name: result\n                                Type-name: QueryUserResult\n                                Type-definition: QueryUserResult",
+          "xml": {
+            "name": "result",
+            "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+            "prefix": "tns",
+            "attribute": false,
+            "wrapped": false
+          },
+          "type": "string"
+        }
+      },
+      "required": [
+        "result"
+      ]
+    },
+    "pingRequest": {
+      "title": "pingRequest",
+      "description": "",
+      "xml": {
+        "name": "pingRequest",
+        "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+        "prefix": "tns",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object"
+    },
+    "pingResponse": {
+      "title": "pingResponse",
+      "description": "",
+      "xml": {
+        "name": "pingResponse",
+        "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+        "prefix": "tns",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "errorCode": {
+          "description": "Field-name: errorCode\n                                Field-description: test request to check service availability. 0 in case of success, 1 in case of any error\n                                Type-name: Integer(null,null,null)\n                                Type-definition: Integer(null,null,null)\n                                Type-description: whole numbers, including 0 and negative numbers from  -2.147.483.648 to +2.147.483.647\n                                \n                                service availability check.",
+          "xml": {
+            "name": "errorCode",
+            "namespace": "http://redmasterdataquery.services.soagovernance.osb.spardat.at/redmasterdataquery/v2",
+            "prefix": "tns",
+            "attribute": false,
+            "wrapped": false
+          },
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "pingRequestMessage": {
+      "title": "pingRequestMessage",
+      "type": "object",
+      "properties": {
+        "pingRequest": {
+          "$ref": "#/definitions/pingRequest"
+        }
+      },
+      "required": [
+        "pingRequest"
+      ]
+    },
+    "pingResponseMessage": {
+      "title": "pingResponseMessage",
+      "xml": {
+        "name": "pingResponseMessage",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "pingResponse": {
+          "$ref": "#/definitions/pingResponse"
+        }
+      },
+      "required": [
+        "pingResponse"
+      ]
+    },
+    "querySolFunRequestMessage": {
+      "title": "querySolFunRequestMessage",
+      "type": "object",
+      "properties": {
+        "querySolFunRequest": {
+          "$ref": "#/definitions/querySolFunRequest"
+        }
+      },
+      "required": [
+        "querySolFunRequest"
+      ]
+    },
+    "querySolFunResponseMessage": {
+      "title": "querySolFunResponseMessage",
+      "xml": {
+        "name": "querySolFunResponseMessage",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "querySolFunResponse": {
+          "$ref": "#/definitions/querySolFunResponse"
+        }
+      },
+      "required": [
+        "querySolFunResponse"
+      ]
+    },
+    "querySolutionRequestMessage": {
+      "title": "querySolutionRequestMessage",
+      "type": "object",
+      "properties": {
+        "querySolutionRequest": {
+          "$ref": "#/definitions/querySolutionRequest"
+        }
+      },
+      "required": [
+        "querySolutionRequest"
+      ]
+    },
+    "querySolutionResponseMessage": {
+      "title": "querySolutionResponseMessage",
+      "xml": {
+        "name": "querySolutionResponseMessage",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "querySolutionResponse": {
+          "$ref": "#/definitions/querySolutionResponse"
+        }
+      },
+      "required": [
+        "querySolutionResponse"
+      ]
+    },
+    "queryUserRequestMessage": {
+      "title": "queryUserRequestMessage",
+      "type": "object",
+      "properties": {
+        "queryUserRequest": {
+          "$ref": "#/definitions/queryUserRequest"
+        }
+      },
+      "required": [
+        "queryUserRequest"
+      ]
+    },
+    "queryUserResponseMessage": {
+      "title": "queryUserResponseMessage",
+      "xml": {
+        "name": "queryUserResponseMessage",
+        "attribute": false,
+        "wrapped": false
+      },
+      "type": "object",
+      "properties": {
+        "queryUserResponse": {
+          "$ref": "#/definitions/queryUserResponse"
+        }
+      },
+      "required": [
+        "queryUserResponse"
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "REDMasterdataQueryBinding",
+      "description": ""
+    }
+  ]
+}
