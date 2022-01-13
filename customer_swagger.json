@@ -1,0 +1,388 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Swagger API definition for OSB Connectors of CustomerAccount",
+    "description": "This is a Swagger API definition for OSB Connectors.",
+    "version": "1.5.0",
+    "termsOfService": "http://s-itsolutions.com/terms/",
+    "contact": {
+      "name": "sIT Solutions",
+      "email": "helpdesk@s-itsolutions.com",
+      "url": "http://swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "esb.dev.imcplus.net",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "FedLogin": {
+      "type": "oauth2",
+      "authorizationUrl": "https://login.dev.sparkasse.at/sts/oauth/authorize",
+      "flow": "implicit",
+      "scopes": {
+        "OSB-YZY80S5A": "Expertcode OSB-YZY80S5A"
+      }
+    },
+    "MBPlus": {
+      "type": "oauth2",
+      "authorizationUrl": "https://idp-e.alfa.s-mxs.net/kerberoslogin/authorize",
+      "flow": "implicit",
+      "scopes": {
+        "OSB-YZY80S5A": "Expertcode OSB-YZY80S5A"
+      }
+    }
+  },
+  "paths": {
+    "/B0301_KDB/CustomerAccount/Alfa/CustomerAccountV1/checkSPlusAccount": {
+      "post": {
+        "operationId": "at.spardat.kdb.customeraccount.services.v1.CustomerAccount.checkSPlusAccount.Alfa",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "checkSPlusAccountRequest",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "customerId": {
+                  "type": "string",
+                  "maxLength": 16
+                }
+              },
+              "required": [
+                "customerId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hasSPlusAccountYN": {
+                  "type": "boolean",
+                  "format": "boolean"
+                }
+              },
+              "required": [
+                "hasSPlusAccountYN"
+              ]
+            }
+          },
+          "400": {
+            "description": "Business error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message ": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      },
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message",
+                      "field",
+                      "code"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "errors"
+              ]
+            }
+          },
+          "500": {
+            "description": "Technical Error (error occurred while processing the request)"
+          }
+        }
+      }
+    },
+    "/B0301_KDB/CustomerAccount/OAuth/CustomerAccountV1/checkSPlusAccount": {
+      "post": {
+        "operationId": "at.spardat.kdb.customeraccount.services.v1.CustomerAccount.checkSPlusAccount.OAuth",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "checkSPlusAccountRequest",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "customerId": {
+                  "type": "string",
+                  "maxLength": 16
+                }
+              },
+              "required": [
+                "customerId"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "FedLogin": []
+          },
+          {
+            "MBPlus": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hasSPlusAccountYN": {
+                  "type": "boolean",
+                  "format": "boolean"
+                }
+              },
+              "required": [
+                "hasSPlusAccountYN"
+              ]
+            }
+          },
+          "400": {
+            "description": "Business error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message ": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      },
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message",
+                      "field",
+                      "code"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "errors"
+              ]
+            }
+          },
+          "500": {
+            "description": "Technical Error (error occurred while processing the request)"
+          }
+        }
+      }
+    },
+    "/B0301_KDB/CustomerAccount/JWT/CustomerAccountV1/checkSPlusAccount": {
+      "post": {
+        "operationId": "at.spardat.kdb.customeraccount.services.v1.CustomerAccount.checkSPlusAccount.JWT",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "checkSPlusAccountRequest",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "customerId": {
+                  "type": "string",
+                  "maxLength": 16
+                }
+              },
+              "required": [
+                "customerId"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "FedLogin": []
+          },
+          {
+            "MBPlus": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hasSPlusAccountYN": {
+                  "type": "boolean",
+                  "format": "boolean"
+                }
+              },
+              "required": [
+                "hasSPlusAccountYN"
+              ]
+            }
+          },
+          "400": {
+            "description": "Business error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message ": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      },
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message",
+                      "field",
+                      "code"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "errors"
+              ]
+            }
+          },
+          "500": {
+            "description": "Technical Error (error occurred while processing the request)"
+          }
+        }
+      }
+    },
+    "/B0301_KDB/CustomerAccount/REST/CustomerAccountV2/checkSPlusAccount": {
+      "post": {
+        "operationId": "at.spardat.kdb.customeraccount.services.v2.CustomerAccount.checkSPlusAccount.JWT",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "checkSPlusAccountRequest",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "customerId": {
+                  "type": "string",
+                  "maxLength": 16
+                }
+              },
+              "required": [
+                "customerId"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "FedLogin": [
+              "OSB-YZY80S5A"
+            ]
+          },
+          {
+            "MBPlus": [
+              "OSB-YZY80S5A"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hasSPlusAccountYN": {
+                  "type": "boolean",
+                  "format": "boolean"
+                }
+              },
+              "required": [
+                "hasSPlusAccountYN"
+              ]
+            }
+          },
+          "400": {
+            "description": "Business error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message ": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      },
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message",
+                      "field",
+                      "code"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "errors"
+              ]
+            }
+          },
+          "500": {
+            "description": "Technical Error (error occurred while processing the request)"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {}
+}
