@@ -1,0 +1,4238 @@
+openapi: 3.0.1
+info:
+  version: '2.0'
+  title: at.spardat.loanservices.loancalculator
+components:
+  schemas:
+    SpecialAgreementV3:
+      type: object
+      properties:
+        specialAgreement:
+          type: number
+          description: amount of the special agreemnet
+          format: double
+        percSpecialAgreement:
+          type: number
+          description: percentage of the special agreement
+          format: double
+        interestPartCancellation:
+          type: number
+          description: Interest part of canellation
+          format: double
+        startDate:
+          type: string
+          description: Start date of the special agreement
+          format: date
+        endDate:
+          type: string
+          description: End date of the special agreement
+          format: date
+        valueDateInstalment:
+          type: string
+          description: ''
+          format: date
+        occurrence:
+          type: integer
+          description: Number of occurrences
+          format: int32
+        period:
+          type: string
+          description: Periodicity of the special agreement
+        capitalisation:
+          type: boolean
+          description: Flag if capitalisation for interest is done
+          format: boolean
+        agreementType:
+          type: string
+          description: Type of specail agreement
+        untilEndOfTerm:
+          type: boolean
+          description: Flag if the special agreement is valuid until end of term
+          format: boolean
+        ultimo:
+          type: boolean
+          description: Flag if the special agrrement is applied always at ultimo
+          format: boolean
+        directDebit:
+          type: boolean
+          description: Flag if special agreement is invoiced using direct debit
+          format: boolean
+      required:
+      - startDate
+      - period
+      - capitalisation
+      - agreementType
+      - untilEndOfTerm
+      - ultimo
+      - directDebit
+    LoanCalcHeaderV2:
+      type: object
+      properties:
+        loanType:
+          type: string
+          description: Specifies the base type of a loan
+        calcEffectiveInterestRate:
+          type: boolean
+          description: Effective interest rate is calculated as a result
+          format: boolean
+        termType:
+          type: string
+          description: Specifies how the end date of the loan is defined
+        termMonths:
+          type: integer
+          description: Number of months which specifies the term of the loan. See
+            termType
+          format: int32
+        termInstalments:
+          type: integer
+          description: Number of instalments which specifies the term of the loan.
+            See termType
+          format: int32
+        loanEndDate:
+          type: string
+          description: Loan end date, when a fixed date is used. See termType
+          format: date
+        loanAmount:
+          type: number
+          description: Loan amount
+          format: double
+        instalment:
+          type: number
+          description: Instalment if it is used for calculation
+          format: double
+        residualValue:
+          type: number
+          description: Residual value for calculation
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate for calculation (change of interest rate). If
+            no change fill with the same value as interestRateOld
+          format: double
+        calculationObject:
+          type: string
+          description: Defines which part of the loan is calculated
+        instalmentType:
+          type: string
+          description: Type of instalment calculation
+        interestDaysMode:
+          type: string
+          description: Interest days for the calculation of account closure
+        interestCalcMethod:
+          type: string
+          description: Calculation of interest anticipative or decursive
+        interestCalcPeriod:
+          type: string
+          description: Defines the periodicity of the interest rate
+        instalmentRoundingType:
+          type: string
+          description: Rounding of the instalment
+        instalmentRoundingLimit:
+          type: string
+          description: Rounding limit of the instalment
+        payoutDate:
+          type: string
+          description: Date when the payout takes place
+          format: date
+        repaymentStart:
+          type: string
+          description: Date when the first repayment is done
+          format: date
+        repaymentUltimo:
+          type: boolean
+          description: Repayment always takes place at ultimo
+          format: boolean
+        repaymentPeriod:
+          type: string
+          description: Period of repayment
+        nextSettlementDate:
+          type: string
+          description: Date when the next account settlement takes place. If empty
+            and closing period is 1,2,3 then it is calculated based on payoutDate
+          format: date
+        settlementPeriod:
+          type: string
+          description: Period of interest amortization
+        settlementUltimo:
+          type: boolean
+          description: Settlement of account always takes place at ultimo
+          format: boolean
+        settlementMonth:
+          type: integer
+          description: Number of months when closing takes place, when closing period
+            is reference date
+          format: int32
+        followUpInterestRate:
+          type: number
+          description: Follow-up interest rate e.g. for fixed interest rate follow
+            by an indexed one
+          format: double
+        followUpStartDate:
+          type: string
+          description: Start date when the follow-up interest rate is considered in
+            the calculation
+          format: date
+        interestCapitalisation:
+          type: boolean
+          description: Flag how to handle interst within an amortization free period
+          format: boolean
+      required:
+      - loanType
+      - calcEffectiveInterestRate
+      - termType
+      - loanAmount
+      - calculationObject
+      - instalmentType
+      - interestDaysMode
+      - interestCalcMethod
+      - interestCalcPeriod
+      - instalmentRoundingType
+      - instalmentRoundingLimit
+      - payoutDate
+      - repaymentStart
+      - repaymentUltimo
+      - repaymentPeriod
+      - settlementPeriod
+      - settlementUltimo
+      - interestCapitalisation
+    LoanCalcResultAddOnV2:
+      type: object
+      properties:
+        bankingActInsurance:
+          type: number
+          description: Total amount of insurance premium which is included in the
+            total amount
+          format: double
+        worstCaseEIR:
+          type: number
+          description: Effective interest rate calculated with worst case interest
+            rate
+          format: double
+      required:
+      - bankingActInsurance
+    LoanAmountOutputV2:
+      type: object
+      properties:
+        calcSuccessful:
+          type: boolean
+          description: Information if the calculation was successful or not
+          format: boolean
+        returnInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              returnID:
+                type: string
+                description: Error number
+                maxLength: 50
+              returnText:
+                type: string
+                description: Textual error description
+                maxLength: 256
+              returnCategory:
+                type: string
+                description: Category, defines in which area the error occured
+                maxLength: 50
+            required:
+            - returnID
+            - returnText
+            - returnCategory
+          description: Errors and warnings as additional information of result of
+            the calculation
+        loanAmountResult:
+          type: object
+          properties:
+            loanAmount:
+              type: number
+              description: Calculated Loan amount
+              format: double
+          required:
+          - loanAmount
+          description: Results of the loan amount calculation
+      required:
+      - calcSuccessful
+      - loanAmountResult
+    CreditLineV2:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: amount at that date
+          format: double
+        valueDate:
+          type: string
+          description: value date
+          format: date
+        creditLineEvent:
+          type: string
+          description: Specifies the event type
+        directDebit:
+          type: boolean
+          description: Flag if amout is direct debited
+          format: boolean
+      required:
+      - amount
+      - valueDate
+      - creditLineEvent
+      - directDebit
+    OneTimeFeeV2:
+      type: object
+      properties:
+        oneTimeFee:
+          type: number
+          description: Amount of the one-time fee
+          format: double
+        name:
+          type: string
+          description: Name of the one-time fee
+          maxLength: 50
+        feeChargeType:
+          type: string
+          description: Type how the fee is charged
+        effectsEIR:
+          type: boolean
+          description: If true, one-time fee is considered in EIR calculation
+          format: boolean
+      required:
+      - oneTimeFee
+      - feeChargeType
+      - effectsEIR
+    LoanAmountResultV2:
+      type: object
+      properties:
+        loanAmount:
+          type: number
+          description: Calculated Loan amount
+          format: double
+      required:
+      - loanAmount
+    LoanCalcFullInputV3:
+      type: object
+      properties:
+        calculationControl:
+          type: object
+          properties:
+            paymentPlan:
+              type: boolean
+              description: If true, Payment plan is calculated and in the result
+              format: boolean
+            creditLineTrend:
+              type: boolean
+              description: if true, credit line trend is calculated an in the result
+              format: boolean
+            paymentPlanESIS:
+              type: boolean
+              description: if true, Payment plan ESIS is calculated and in the result
+              format: boolean
+          required:
+          - paymentPlan
+          - creditLineTrend
+          - paymentPlanESIS
+          description: Control flags for calculation and result
+        loanCalcHeader:
+          type: object
+          properties:
+            loanType:
+              type: string
+              description: Specifies the base type of a loan
+            calcEffectiveInterestRate:
+              type: boolean
+              description: Effective interest rate is calculated as a result
+              format: boolean
+            termType:
+              type: string
+              description: Specifies how the end date of the loan is defined
+            termMonths:
+              type: integer
+              description: Number of months which specifies the term of the loan.
+                See termType
+              format: int32
+            termInstalments:
+              type: integer
+              description: Number of instalments which specifies the term of the loan.
+                See termType
+              format: int32
+            loanEndDate:
+              type: string
+              description: Loan end date, when a fixed date is used. See termType
+              format: date
+            loanAmount:
+              type: number
+              description: Loan amount
+              format: double
+            instalment:
+              type: number
+              description: Instalment if it is used for calculation
+              format: double
+            residualValue:
+              type: number
+              description: Residual value for calculation
+              format: double
+            interestRate:
+              type: number
+              description: Interest rate for calculation (change of interest rate).
+                If no change fill with the same value as interestRateOld
+              format: double
+            calculationObject:
+              type: string
+              description: Defines which part of the loan is calculated
+            instalmentType:
+              type: string
+              description: Type of instalment calculation
+            interestDaysMode:
+              type: string
+              description: Interest days for the calculation of account closure
+            interestCalcMethod:
+              type: string
+              description: Calculation of interest anticipative or decursive
+            interestCalcPeriod:
+              type: string
+              description: Defines the periodicity of the interest rate
+            instalmentRoundingType:
+              type: string
+              description: Rounding of the instalment
+            instalmentRoundingLimit:
+              type: string
+              description: Rounding limit of the instalment
+            payoutDate:
+              type: string
+              description: Date when the payout takes place
+              format: date
+            repaymentStart:
+              type: string
+              description: Date when the first repayment is done
+              format: date
+            repaymentUltimo:
+              type: boolean
+              description: Repayment always takes place at ultimo
+              format: boolean
+            repaymentPeriod:
+              type: string
+              description: Period of repayment
+            nextSettlementDate:
+              type: string
+              description: Date when the next account settlement takes place. If empty
+                and closing period is 1,2,3 then it is calculated based on payoutDate
+              format: date
+            settlementPeriod:
+              type: string
+              description: Period of interest amortization
+            settlementUltimo:
+              type: boolean
+              description: Settlement of account always takes place at ultimo
+              format: boolean
+            settlementMonth:
+              type: integer
+              description: Number of months when closing takes place, when closing
+                period is reference date
+              format: int32
+            followUpInterestRate:
+              type: number
+              description: Follow-up interest rate e.g. for fixed interest rate follow
+                by an indexed one
+              format: double
+            followUpStartDate:
+              type: string
+              description: Start date when the follow-up interest rate is considered
+                in the calculation
+              format: date
+            interestCapitalisation:
+              type: boolean
+              description: Flag how to handle interst within an amortization free
+                period
+              format: boolean
+          required:
+          - loanType
+          - calcEffectiveInterestRate
+          - termType
+          - loanAmount
+          - calculationObject
+          - instalmentType
+          - interestDaysMode
+          - interestCalcMethod
+          - interestCalcPeriod
+          - instalmentRoundingType
+          - instalmentRoundingLimit
+          - payoutDate
+          - repaymentStart
+          - repaymentUltimo
+          - repaymentPeriod
+          - settlementPeriod
+          - settlementUltimo
+          - interestCapitalisation
+          description: Calculation header for simple and full calculation
+        loanCalcHeaderAddOn:
+          type: object
+          properties:
+            loanState:
+              type: string
+              description: State of the loan
+            latestRepayment:
+              type: string
+              description: Amortization schedule stops at that date and the residual
+                payment at that date covers the outstanding amount.
+              format: date
+            stepUpAmount:
+              type: number
+              description: Step-up amount
+              format: double
+            accountSettlementItem:
+              type: number
+              description: Amount of account closure from the last account closure
+                to start of calculation
+              format: double
+            interestRateOld:
+              type: number
+              description: Interest rate for calculation (change of interest rate).
+                If no change fill with the same value as interestRate
+              format: double
+            interestChangeDate:
+              type: string
+              description: Date of interest change. If no change leave empty
+              format: date
+            interestPaymentStart:
+              type: string
+              description: Date from which on interest is caluclated
+              format: date
+            instalmentFreezeDays:
+              type: integer
+              description: Number of days at start of amortization schedule, where
+                instalment stays the same
+              format: int32
+            keepExistingInstalment:
+              type: boolean
+              description: Flag, if the installment at start of amortization schedule
+                stay unchanged
+              format: boolean
+            consumerProtectionCode:
+              type: string
+              description: Information which type of consumer protection is used
+            effectiveInterestDaysMode:
+              type: string
+              description: Interest days method for the calculation of the effective
+                interest rate
+            worstCaseEIR:
+              type: boolean
+              description: If true, a worstCase effective interest rate is calculated
+              format: boolean
+            worstCaseInterestRatePhase1:
+              type: number
+              description: Interest rate to calculate the worstCase effective interest
+                rate
+              format: double
+            worstCaseInterestRatePhase2:
+              type: number
+              description: Follow-up worstCase interest rate e.g. for fixed interest
+                rate followed by an indexed one
+              format: double
+            worstCasePhase2StartDate:
+              type: string
+              description: Start date when the phase 2 worstCase interest rate is
+                considered in worsCaseEIR calculation
+              format: date
+            repaymentType:
+              type: string
+              description: Used for setting direct debit in creditLine result. If
+                creditLineTrend is true, field is mandatory
+            hypotheticalInstalmentDate:
+              type: string
+              description: Used to mark hypothetical instalments in ESIS amortization
+                schedule
+              format: date
+          required:
+          - loanState
+          - keepExistingInstalment
+          - consumerProtectionCode
+          - effectiveInterestDaysMode
+          - worstCaseEIR
+          description: Calculation header add on for full calclualtion
+        specialAgreement:
+          type: array
+          items:
+            type: object
+            properties:
+              specialAgreement:
+                type: number
+                description: amount of the special agreemnet
+                format: double
+              percSpecialAgreement:
+                type: number
+                description: percentage of the special agreement
+                format: double
+              interestPartCancellation:
+                type: number
+                description: Interest part of canellation
+                format: double
+              startDate:
+                type: string
+                description: Start date of the special agreement
+                format: date
+              endDate:
+                type: string
+                description: End date of the special agreement
+                format: date
+              valueDateInstalment:
+                type: string
+                description: ''
+                format: date
+              occurrence:
+                type: integer
+                description: Number of occurrences
+                format: int32
+              period:
+                type: string
+                description: Periodicity of the special agreement
+              capitalisation:
+                type: boolean
+                description: Flag if capitalisation for interest is done
+                format: boolean
+              agreementType:
+                type: string
+                description: Type of specail agreement
+              untilEndOfTerm:
+                type: boolean
+                description: Flag if the special agreement is valuid until end of
+                  term
+                format: boolean
+              ultimo:
+                type: boolean
+                description: Flag if the special agrrement is applied always at ultimo
+                format: boolean
+              directDebit:
+                type: boolean
+                description: Flag if special agreement is invoiced using direct debit
+                format: boolean
+            required:
+            - startDate
+            - period
+            - capitalisation
+            - agreementType
+            - untilEndOfTerm
+            - ultimo
+            - directDebit
+          description: List of special agreements
+        insuranceForEIR:
+          type: array
+          items:
+            type: object
+            properties:
+              premium:
+                type: number
+                description: Premium of the insurance
+                format: double
+              insuranceStartDate:
+                type: string
+                description: Date of the appearance of a one-time premium or start
+                  date for periodic premiums
+                format: date
+              insuranceEndDate:
+                type: string
+                description: End date for periodic premiums. Either endDate, TermMonth
+                  or lastUntilEnd must be filled for periodic premiums
+                format: date
+              insuranceTermMonth:
+                type: integer
+                description: Term in months. Either endDate, TermMonth or lastUntilEnd
+                  must be filled for periodic premiums
+                format: int32
+              lastUntilEnd:
+                type: boolean
+                description: If true, premium is valid until the end of the loan
+                format: boolean
+              insurancePeriod:
+                type: string
+                description: Periodictiy of the premium
+            required:
+            - premium
+            - insuranceStartDate
+            - lastUntilEnd
+            - insurancePeriod
+          description: List of insurance for EIR calculation
+        oneTimeFee:
+          type: array
+          items:
+            type: object
+            properties:
+              oneTimeFee:
+                type: number
+                description: Amount of the one-time fee
+                format: double
+              name:
+                type: string
+                description: Name of the one-time fee
+                maxLength: 50
+              feeChargeType:
+                type: string
+                description: Type how the fee is charged
+              effectsEIR:
+                type: boolean
+                description: If true, one-time fee is considered in EIR calculation
+                format: boolean
+            required:
+            - oneTimeFee
+            - feeChargeType
+            - effectsEIR
+          description: List of one-time fees
+        periodicFeePercentage:
+          type: array
+          items:
+            type: object
+            properties:
+              rate:
+                type: number
+                description: Percentage of the fee which is considered at closing.
+                  Calculated based calcBase. Fee is charged in the period of the interest
+                  rate
+                format: double
+              name:
+                type: string
+                description: Description of the fee
+                maxLength: 50
+              calcBase:
+                type: string
+                description: Base value which is used for calculation
+              period:
+                type: string
+                description: Defines the periodicity of the rate
+              effectsEIR:
+                type: boolean
+                description: If true, fee is considered in EIR calculation
+                format: boolean
+            required:
+            - rate
+            - calcBase
+            - period
+            - effectsEIR
+          description: List of periodic fees calculated based on an percentage
+        periodicFeeFixedAmount:
+          type: array
+          items:
+            type: object
+            properties:
+              periodicFee:
+                type: number
+                description: Amount of the periodic fee
+                format: double
+              name:
+                type: string
+                description: Description of the fee
+                maxLength: 50
+              calcBase:
+                type: string
+                description: Moment when the fee is charged, e.g. per closing
+              period:
+                type: string
+                description: Period in which the fee is charged. If empty, then the
+                  closing period of the calculation header is used.
+              effectsEIR:
+                type: boolean
+                description: If true, fee is considered in EIR calculation
+                format: boolean
+              effectsAmortization:
+                type: boolean
+                description: If true, fee is considered in amortization schedule.
+                  Usually true, e.g. for Kontokondition false
+                format: boolean
+            required:
+            - periodicFee
+            - calcBase
+            - effectsEIR
+            - effectsAmortization
+          description: List of periodic fees with fixed amount
+    LoanAmountOutputV3:
+      type: object
+      properties:
+        calcSuccessful:
+          type: boolean
+          description: Information if the calculation was successful or not
+          format: boolean
+        returnInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              returnID:
+                type: string
+                description: Error number
+                maxLength: 50
+              returnText:
+                type: string
+                description: Textual error description
+                maxLength: 256
+              returnCategory:
+                type: string
+                description: Category, defines in which area the error occured
+                maxLength: 50
+            required:
+            - returnID
+            - returnText
+            - returnCategory
+          description: Errors and warnings as additional information of result of
+            the calculation
+        loanAmountResult:
+          type: object
+          properties:
+            loanAmount:
+              type: number
+              description: Calculated Loan amount
+              format: double
+          required:
+          - loanAmount
+          description: Results of the loan amount calculation
+      required:
+      - calcSuccessful
+      - loanAmountResult
+    LoanCalcResultAddOnV3:
+      type: object
+      properties:
+        bankingActInsurance:
+          type: number
+          description: Total amount of insurance premium which is included in the
+            total amount
+          format: double
+        worstCaseEIR:
+          type: number
+          description: Effective interest rate calculated with worst case interest
+            rate
+          format: double
+        worstCaseInstalment:
+          type: number
+          description: Instalment calculated with worst case interest rate. MAX(phase1,
+            phase2, customer instalment)
+          format: double
+      required:
+      - bankingActInsurance
+    LoanCalcFullOutputV2:
+      type: object
+      properties:
+        calcSuccessful:
+          type: boolean
+          description: Information if the calculation was successful or not
+          format: boolean
+        returnInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              returnID:
+                type: string
+                description: Error number
+                maxLength: 50
+              returnText:
+                type: string
+                description: Textual error description
+                maxLength: 256
+              returnCategory:
+                type: string
+                description: Category, defines in which area the error occured
+                maxLength: 50
+            required:
+            - returnID
+            - returnText
+            - returnCategory
+          description: Errors and warnings as additional information of result of
+            the calculation
+        loanCalcResult:
+          type: object
+          properties:
+            instalment:
+              type: number
+              description: Instalment
+              format: double
+            interestRate:
+              type: number
+              description: Interest rate. Field is supported if calculationObject
+                = INTEREST_RATE. Otherwise it is empty
+              format: double
+            instalmentStart:
+              type: number
+              description: First instalment of amortization schedule
+              format: double
+            instalmentFinal:
+              type: number
+              description: Last instalment of amortization schedule
+              format: double
+            residualValue:
+              type: number
+              description: Residual value
+              format: double
+            totalCost:
+              type: number
+              description: Amount of total costs
+              format: double
+            overallExposure:
+              type: number
+              description: Overall exposure
+              format: double
+            effectiveInterestRate:
+              type: number
+              description: Effective interest rate. Field is supported if calcEffectiveInterestRate=true.
+                Otherwise it si emtpy.
+              format: double
+            totalInterestRate:
+              type: number
+              description: Total interest rate
+              format: double
+            interestPaymentStart:
+              type: string
+              description: Date when the interest paymnet starts
+              format: date
+            loanEndDate:
+              type: string
+              description: End date of the loan
+              format: date
+            termMonths:
+              type: integer
+              description: Number of months which specifies the term of the loan
+              format: int32
+            termInstalments:
+              type: integer
+              description: Number of instalments which specifies the term of the loan
+              format: int32
+            totalInterest:
+              type: number
+              description: Total sum of interest
+              format: double
+            residualDebt:
+              type: number
+              description: Residual debt
+              format: double
+            accountClosureItem:
+              type: number
+              description: Amount of account closure from the last account closure
+                to start of calculation
+              format: double
+            totalAmortization:
+              type: number
+              description: Total sum of amortization
+              format: double
+            bankingActTotalCost:
+              type: number
+              description: Total cost = sum of interest, fees and insurance premium
+              format: double
+            bankingActTotalAmount:
+              type: number
+              description: Total amount = sum of amortization, interest and fees
+              format: double
+            bankingActTotalLoanAmount:
+              type: number
+              description: Total loan amount
+              format: double
+            nextSettlementDate:
+              type: string
+              description: Next settlement date that is used in the calculation
+              format: date
+          required:
+          - instalment
+          - instalmentStart
+          - instalmentFinal
+          - residualValue
+          - totalCost
+          - overallExposure
+          - interestPaymentStart
+          - loanEndDate
+          - termMonths
+          - termInstalments
+          - totalInterest
+          - residualDebt
+          - accountClosureItem
+          - totalAmortization
+          - bankingActTotalCost
+          - bankingActTotalAmount
+          - bankingActTotalLoanAmount
+          - nextSettlementDate
+          description: Results of the calculation for simple and full calculation
+        loanCalcResultAddOn:
+          type: object
+          properties:
+            bankingActInsurance:
+              type: number
+              description: Total amount of insurance premium which is included in
+                the total amount
+              format: double
+            worstCaseEIR:
+              type: number
+              description: Effective interest rate calculated with worst case interest
+                rate
+              format: double
+          required:
+          - bankingActInsurance
+          description: Result add ons for full calculation
+        amortizationScheduleLine:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: Date of amortization schedule row
+                format: date
+              instalment:
+                type: number
+                description: Instalment
+                format: double
+              interest:
+                type: number
+                description: Interest
+                format: double
+              amortization:
+                type: number
+                description: Amortization
+                format: double
+              fee:
+                type: number
+                description: Fee
+                format: double
+              residualDebt:
+                type: number
+                description: Residual debt
+                format: double
+              outPayment:
+                type: number
+                description: Outpayment
+                format: double
+              specialAmortization:
+                type: number
+                description: Special payment
+                format: double
+              interestPartCancellation:
+                type: number
+                description: Interest part of canellation
+                format: double
+              interestRate:
+                type: number
+                description: Interest rate
+                format: double
+              rowInfo:
+                type: string
+                description: Information if the row contains an instalment
+              settlementInfo:
+                type: string
+                description: Information if the row contaisn a closing
+            required:
+            - date
+            - instalment
+            - interest
+            - amortization
+            - fee
+            - residualDebt
+            - outPayment
+            - specialAmortization
+            - interestPartCancellation
+            - interestRate
+            - rowInfo
+            - settlementInfo
+          description: List of amortization schedule lines
+        specialAgreement:
+          type: array
+          items:
+            type: object
+            properties:
+              specialAgreement:
+                type: number
+                description: amount of the special agreemnet
+                format: double
+              percSpecialAgreement:
+                type: number
+                description: percentage of the special agreement
+                format: double
+              interestPartCancellation:
+                type: number
+                description: Interest part of canellation
+                format: double
+              startDate:
+                type: string
+                description: Start date of the special agreement
+                format: date
+              endDate:
+                type: string
+                description: End date of the special agreement
+                format: date
+              valueDateInstalment:
+                type: string
+                description: ''
+                format: date
+              occurrence:
+                type: integer
+                description: Number of occurrences
+                format: int32
+              period:
+                type: string
+                description: Periodicity of the special agreement
+              capitalisation:
+                type: boolean
+                description: Flag if capitalisation for interest is done
+                format: boolean
+              agreementType:
+                type: string
+                description: Type of specail agreement
+              untilEndOfTerm:
+                type: boolean
+                description: Flag if the special agreement is valuid until end of
+                  term
+                format: boolean
+              ultimo:
+                type: boolean
+                description: Flag if the special agrrement is applied always at ultimo
+                format: boolean
+              directDebit:
+                type: boolean
+                description: Flag if special agreement is invoiced using direct debit
+                format: boolean
+            required:
+            - startDate
+            - period
+            - capitalisation
+            - agreementType
+            - untilEndOfTerm
+            - ultimo
+            - directDebit
+          description: List of special agreements, if control is set to yes
+        creditLine:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: number
+                description: amount at that date
+                format: double
+              valueDate:
+                type: string
+                description: value date
+                format: date
+              creditLineEvent:
+                type: string
+                description: Specifies the event type
+              directDebit:
+                type: boolean
+                description: Flag if amout is direct debited
+                format: boolean
+            required:
+            - amount
+            - valueDate
+            - creditLineEvent
+            - directDebit
+          description: List of credit lines, if control is set to yes.
+      required:
+      - calcSuccessful
+      - loanCalcResult
+    PeriodicFeePercentageV2:
+      type: object
+      properties:
+        rate:
+          type: number
+          description: Percentage of the fee which is considered at closing. Calculated
+            based calcBase. Fee is charged in the period of the interest rate
+          format: double
+        name:
+          type: string
+          description: Description of the fee
+          maxLength: 50
+        calcBase:
+          type: string
+          description: Base value which is used for calculation
+        period:
+          type: string
+          description: Defines the periodicity of the rate
+        effectsEIR:
+          type: boolean
+          description: If true, fee is considered in EIR calculation
+          format: boolean
+      required:
+      - rate
+      - calcBase
+      - period
+      - effectsEIR
+    LoanCalcReturnInfo:
+      type: object
+      properties:
+        returnID:
+          type: string
+          description: Error number
+          maxLength: 50
+        returnText:
+          type: string
+          description: Textual error description
+          maxLength: 256
+    LoanCalcResultV2:
+      type: object
+      properties:
+        instalment:
+          type: number
+          description: Instalment
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate. Field is supported if calculationObject = INTEREST_RATE.
+            Otherwise it is empty
+          format: double
+        instalmentStart:
+          type: number
+          description: First instalment of amortization schedule
+          format: double
+        instalmentFinal:
+          type: number
+          description: Last instalment of amortization schedule
+          format: double
+        residualValue:
+          type: number
+          description: Residual value
+          format: double
+        totalCost:
+          type: number
+          description: Amount of total costs
+          format: double
+        overallExposure:
+          type: number
+          description: Overall exposure
+          format: double
+        effectiveInterestRate:
+          type: number
+          description: Effective interest rate. Field is supported if calcEffectiveInterestRate=true.
+            Otherwise it si emtpy.
+          format: double
+        totalInterestRate:
+          type: number
+          description: Total interest rate
+          format: double
+        interestPaymentStart:
+          type: string
+          description: Date when the interest paymnet starts
+          format: date
+        loanEndDate:
+          type: string
+          description: End date of the loan
+          format: date
+        termMonths:
+          type: integer
+          description: Number of months which specifies the term of the loan
+          format: int32
+        termInstalments:
+          type: integer
+          description: Number of instalments which specifies the term of the loan
+          format: int32
+        totalInterest:
+          type: number
+          description: Total sum of interest
+          format: double
+        residualDebt:
+          type: number
+          description: Residual debt
+          format: double
+        accountClosureItem:
+          type: number
+          description: Amount of account closure from the last account closure to
+            start of calculation
+          format: double
+        totalAmortization:
+          type: number
+          description: Total sum of amortization
+          format: double
+        bankingActTotalCost:
+          type: number
+          description: Total cost = sum of interest, fees and insurance premium
+          format: double
+        bankingActTotalAmount:
+          type: number
+          description: Total amount = sum of amortization, interest and fees
+          format: double
+        bankingActTotalLoanAmount:
+          type: number
+          description: Total loan amount
+          format: double
+        nextSettlementDate:
+          type: string
+          description: Next settlement date that is used in the calculation
+          format: date
+      required:
+      - instalment
+      - instalmentStart
+      - instalmentFinal
+      - residualValue
+      - totalCost
+      - overallExposure
+      - interestPaymentStart
+      - loanEndDate
+      - termMonths
+      - termInstalments
+      - totalInterest
+      - residualDebt
+      - accountClosureItem
+      - totalAmortization
+      - bankingActTotalCost
+      - bankingActTotalAmount
+      - bankingActTotalLoanAmount
+      - nextSettlementDate
+    PeriodicFeePercentageV3:
+      type: object
+      properties:
+        rate:
+          type: number
+          description: Percentage of the fee which is considered at closing. Calculated
+            based calcBase. Fee is charged in the period of the interest rate
+          format: double
+        name:
+          type: string
+          description: Description of the fee
+          maxLength: 50
+        calcBase:
+          type: string
+          description: Base value which is used for calculation
+        period:
+          type: string
+          description: Defines the periodicity of the rate
+        effectsEIR:
+          type: boolean
+          description: If true, fee is considered in EIR calculation
+          format: boolean
+      required:
+      - rate
+      - calcBase
+      - period
+      - effectsEIR
+    LoanCalcFullInputV2:
+      type: object
+      properties:
+        calculationControl:
+          type: object
+          properties:
+            paymentPlan:
+              type: boolean
+              description: If true, Payment plan is calculated and in the result
+              format: boolean
+            creditLineTrend:
+              type: boolean
+              description: if true, credit line trend is calculated an in the result
+              format: boolean
+          required:
+          - paymentPlan
+          - creditLineTrend
+          description: Control flags for calculation and result
+        loanCalcHeader:
+          type: object
+          properties:
+            loanType:
+              type: string
+              description: Specifies the base type of a loan
+            calcEffectiveInterestRate:
+              type: boolean
+              description: Effective interest rate is calculated as a result
+              format: boolean
+            termType:
+              type: string
+              description: Specifies how the end date of the loan is defined
+            termMonths:
+              type: integer
+              description: Number of months which specifies the term of the loan.
+                See termType
+              format: int32
+            termInstalments:
+              type: integer
+              description: Number of instalments which specifies the term of the loan.
+                See termType
+              format: int32
+            loanEndDate:
+              type: string
+              description: Loan end date, when a fixed date is used. See termType
+              format: date
+            loanAmount:
+              type: number
+              description: Loan amount
+              format: double
+            instalment:
+              type: number
+              description: Instalment if it is used for calculation
+              format: double
+            residualValue:
+              type: number
+              description: Residual value for calculation
+              format: double
+            interestRate:
+              type: number
+              description: Interest rate for calculation (change of interest rate).
+                If no change fill with the same value as interestRateOld
+              format: double
+            calculationObject:
+              type: string
+              description: Defines which part of the loan is calculated
+            instalmentType:
+              type: string
+              description: Type of instalment calculation
+            interestDaysMode:
+              type: string
+              description: Interest days for the calculation of account closure
+            interestCalcMethod:
+              type: string
+              description: Calculation of interest anticipative or decursive
+            interestCalcPeriod:
+              type: string
+              description: Defines the periodicity of the interest rate
+            instalmentRoundingType:
+              type: string
+              description: Rounding of the instalment
+            instalmentRoundingLimit:
+              type: string
+              description: Rounding limit of the instalment
+            payoutDate:
+              type: string
+              description: Date when the payout takes place
+              format: date
+            repaymentStart:
+              type: string
+              description: Date when the first repayment is done
+              format: date
+            repaymentUltimo:
+              type: boolean
+              description: Repayment always takes place at ultimo
+              format: boolean
+            repaymentPeriod:
+              type: string
+              description: Period of repayment
+            nextSettlementDate:
+              type: string
+              description: Date when the next account settlement takes place. If empty
+                and closing period is 1,2,3 then it is calculated based on payoutDate
+              format: date
+            settlementPeriod:
+              type: string
+              description: Period of interest amortization
+            settlementUltimo:
+              type: boolean
+              description: Settlement of account always takes place at ultimo
+              format: boolean
+            settlementMonth:
+              type: integer
+              description: Number of months when closing takes place, when closing
+                period is reference date
+              format: int32
+            followUpInterestRate:
+              type: number
+              description: Follow-up interest rate e.g. for fixed interest rate follow
+                by an indexed one
+              format: double
+            followUpStartDate:
+              type: string
+              description: Start date when the follow-up interest rate is considered
+                in the calculation
+              format: date
+            interestCapitalisation:
+              type: boolean
+              description: Flag how to handle interst within an amortization free
+                period
+              format: boolean
+          required:
+          - loanType
+          - calcEffectiveInterestRate
+          - termType
+          - loanAmount
+          - calculationObject
+          - instalmentType
+          - interestDaysMode
+          - interestCalcMethod
+          - interestCalcPeriod
+          - instalmentRoundingType
+          - instalmentRoundingLimit
+          - payoutDate
+          - repaymentStart
+          - repaymentUltimo
+          - repaymentPeriod
+          - settlementPeriod
+          - settlementUltimo
+          - interestCapitalisation
+          description: Calculation header for simple and full calculation
+        loanCalcHeaderAddOn:
+          type: object
+          properties:
+            loanState:
+              type: string
+              description: State of the loan
+            latestRepayment:
+              type: string
+              description: Amortization schedule stops at that date and the residual
+                payment at that date covers the outstanding amount.
+              format: date
+            stepUpAmount:
+              type: number
+              description: Step-up amount
+              format: double
+            accountSettlementItem:
+              type: number
+              description: Amount of account closure from the last account closure
+                to start of calculation
+              format: double
+            interestRateOld:
+              type: number
+              description: Interest rate for calculation (change of interest rate).
+                If no change fill with the same value as interestRate
+              format: double
+            interestChangeDate:
+              type: string
+              description: Date of interest change. If no change leave empty
+              format: date
+            interestPaymentStart:
+              type: string
+              description: Date from which on interest is caluclated
+              format: date
+            instalmentFreezeDays:
+              type: integer
+              description: Number of days at start of amortization schedule, where
+                instalment stays the same
+              format: int32
+            keepExistingInstalment:
+              type: boolean
+              description: Flag, if the installment at start of amortization schedule
+                stay unchanged
+              format: boolean
+            consumerProtectionCode:
+              type: string
+              description: Information which type of consumer protection is used
+            effectiveInterestDaysMode:
+              type: string
+              description: Interest days method for the calculation of the effective
+                interest rate
+            worstCaseEIR:
+              type: boolean
+              description: If true, a worstCase effective interest rate is calculated
+              format: boolean
+            worstCaseInterestRatePhase1:
+              type: number
+              description: Interest rate to calculate the worstCase effective interest
+                rate
+              format: double
+            worstCaseInterestRatePhase2:
+              type: number
+              description: Follow-up worstCase interest rate e.g. for fixed interest
+                rate followed by an indexed one
+              format: double
+            worstCasePhase2StartDate:
+              type: string
+              description: Start date when the phase 2 worstCase interest rate is
+                considered in worsCaseEIR calculation
+              format: date
+            repaymentType:
+              type: string
+              description: Used for setting direct debit in creditLine result. If
+                creditLineTrend is true, field is mandatory
+          required:
+          - loanState
+          - keepExistingInstalment
+          - consumerProtectionCode
+          - effectiveInterestDaysMode
+          - worstCaseEIR
+          description: Calculation header add on for full calclualtion
+        specialAgreement:
+          type: array
+          items:
+            type: object
+            properties:
+              specialAgreement:
+                type: number
+                description: amount of the special agreemnet
+                format: double
+              percSpecialAgreement:
+                type: number
+                description: percentage of the special agreement
+                format: double
+              interestPartCancellation:
+                type: number
+                description: Interest part of canellation
+                format: double
+              startDate:
+                type: string
+                description: Start date of the special agreement
+                format: date
+              endDate:
+                type: string
+                description: End date of the special agreement
+                format: date
+              valueDateInstalment:
+                type: string
+                description: ''
+                format: date
+              occurrence:
+                type: integer
+                description: Number of occurrences
+                format: int32
+              period:
+                type: string
+                description: Periodicity of the special agreement
+              capitalisation:
+                type: boolean
+                description: Flag if capitalisation for interest is done
+                format: boolean
+              agreementType:
+                type: string
+                description: Type of specail agreement
+              untilEndOfTerm:
+                type: boolean
+                description: Flag if the special agreement is valuid until end of
+                  term
+                format: boolean
+              ultimo:
+                type: boolean
+                description: Flag if the special agrrement is applied always at ultimo
+                format: boolean
+              directDebit:
+                type: boolean
+                description: Flag if special agreement is invoiced using direct debit
+                format: boolean
+            required:
+            - startDate
+            - period
+            - capitalisation
+            - agreementType
+            - untilEndOfTerm
+            - ultimo
+            - directDebit
+          description: List of special agreements
+        insuranceForEIR:
+          type: array
+          items:
+            type: object
+            properties:
+              premium:
+                type: number
+                description: Premium of the insurance
+                format: double
+              insuranceStartDate:
+                type: string
+                description: Date of the appearance of a one-time premium or start
+                  date for periodic premiums
+                format: date
+              insuranceEndDate:
+                type: string
+                description: End date for periodic premiums. Either endDate, TermMonth
+                  or lastUntilEnd must be filled for periodic premiums
+                format: date
+              insuranceTermMonth:
+                type: integer
+                description: Term in months. Either endDate, TermMonth or lastUntilEnd
+                  must be filled for periodic premiums
+                format: int32
+              lastUntilEnd:
+                type: boolean
+                description: If true, premium is valid until the end of the loan
+                format: boolean
+              insurancePeriod:
+                type: string
+                description: Periodictiy of the premium
+            required:
+            - premium
+            - insuranceStartDate
+            - lastUntilEnd
+            - insurancePeriod
+          description: List of insurance for EIR calculation
+        oneTimeFee:
+          type: array
+          items:
+            type: object
+            properties:
+              oneTimeFee:
+                type: number
+                description: Amount of the one-time fee
+                format: double
+              name:
+                type: string
+                description: Name of the one-time fee
+                maxLength: 50
+              feeChargeType:
+                type: string
+                description: Type how the fee is charged
+              effectsEIR:
+                type: boolean
+                description: If true, one-time fee is considered in EIR calculation
+                format: boolean
+            required:
+            - oneTimeFee
+            - feeChargeType
+            - effectsEIR
+          description: List of one-time fees
+        periodicFeePercentage:
+          type: array
+          items:
+            type: object
+            properties:
+              rate:
+                type: number
+                description: Percentage of the fee which is considered at closing.
+                  Calculated based calcBase. Fee is charged in the period of the interest
+                  rate
+                format: double
+              name:
+                type: string
+                description: Description of the fee
+                maxLength: 50
+              calcBase:
+                type: string
+                description: Base value which is used for calculation
+              period:
+                type: string
+                description: Defines the periodicity of the rate
+              effectsEIR:
+                type: boolean
+                description: If true, fee is considered in EIR calculation
+                format: boolean
+            required:
+            - rate
+            - calcBase
+            - period
+            - effectsEIR
+          description: List of periodic fees calculated based on an percentage
+        periodicFeeFixedAmount:
+          type: array
+          items:
+            type: object
+            properties:
+              periodicFee:
+                type: number
+                description: Amount of the periodic fee
+                format: double
+              name:
+                type: string
+                description: Description of the fee
+                maxLength: 50
+              calcBase:
+                type: string
+                description: Moment when the fee is charged, e.g. per closing
+              period:
+                type: string
+                description: Period in which the fee is charged. If empty, then the
+                  closing period of the calculation header is used.
+              effectsEIR:
+                type: boolean
+                description: If true, fee is considered in EIR calculation
+                format: boolean
+              effectsAmortization:
+                type: boolean
+                description: If true, fee is considered in amortization schedule.
+                  Usually true, e.g. for Kontokondition false
+                format: boolean
+            required:
+            - periodicFee
+            - calcBase
+            - effectsEIR
+            - effectsAmortization
+          description: List of periodic fees with fixed amount
+    LoanCalcFullOutputV3:
+      type: object
+      properties:
+        calcSuccessful:
+          type: boolean
+          description: Information if the calculation was successful or not
+          format: boolean
+        returnInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              returnID:
+                type: string
+                description: Error number
+                maxLength: 50
+              returnText:
+                type: string
+                description: Textual error description
+                maxLength: 256
+              returnCategory:
+                type: string
+                description: Category, defines in which area the error occured
+                maxLength: 50
+            required:
+            - returnID
+            - returnText
+            - returnCategory
+          description: Errors and warnings as additional information of result of
+            the calculation
+        loanCalcResult:
+          type: object
+          properties:
+            instalment:
+              type: number
+              description: Instalment
+              format: double
+            interestRate:
+              type: number
+              description: Interest rate. Field is supported if calculationObject
+                = INTEREST_RATE. Otherwise it is empty
+              format: double
+            instalmentStart:
+              type: number
+              description: First instalment of amortization schedule
+              format: double
+            instalmentFinal:
+              type: number
+              description: Last instalment of amortization schedule
+              format: double
+            residualValue:
+              type: number
+              description: Residual value
+              format: double
+            totalCost:
+              type: number
+              description: Amount of total costs
+              format: double
+            overallExposure:
+              type: number
+              description: Overall exposure
+              format: double
+            effectiveInterestRate:
+              type: number
+              description: Effective interest rate. Field is supported if calcEffectiveInterestRate=true.
+                Otherwise it si emtpy.
+              format: double
+            totalInterestRate:
+              type: number
+              description: Total interest rate
+              format: double
+            interestPaymentStart:
+              type: string
+              description: Date when the interest paymnet starts
+              format: date
+            loanEndDate:
+              type: string
+              description: End date of the loan
+              format: date
+            termMonths:
+              type: integer
+              description: Number of months which specifies the term of the loan
+              format: int32
+            termInstalments:
+              type: integer
+              description: Number of instalments which specifies the term of the loan
+              format: int32
+            totalInterest:
+              type: number
+              description: Total sum of interest
+              format: double
+            residualDebt:
+              type: number
+              description: Residual debt
+              format: double
+            accountClosureItem:
+              type: number
+              description: Amount of account closure from the last account closure
+                to start of calculation
+              format: double
+            totalAmortization:
+              type: number
+              description: Total sum of amortization
+              format: double
+            bankingActTotalCost:
+              type: number
+              description: Total cost = sum of interest, fees and insurance premium
+              format: double
+            bankingActTotalAmount:
+              type: number
+              description: Total amount = sum of amortization, interest and fees
+              format: double
+            bankingActTotalLoanAmount:
+              type: number
+              description: Total loan amount
+              format: double
+            nextSettlementDate:
+              type: string
+              description: Next settlement date that is used in the calculation
+              format: date
+          required:
+          - instalment
+          - instalmentStart
+          - instalmentFinal
+          - residualValue
+          - totalCost
+          - overallExposure
+          - interestPaymentStart
+          - loanEndDate
+          - termMonths
+          - termInstalments
+          - totalInterest
+          - residualDebt
+          - accountClosureItem
+          - totalAmortization
+          - bankingActTotalCost
+          - bankingActTotalAmount
+          - bankingActTotalLoanAmount
+          - nextSettlementDate
+          description: Results of the calculation for simple and full calculation
+        loanCalcResultAddOn:
+          type: object
+          properties:
+            bankingActInsurance:
+              type: number
+              description: Total amount of insurance premium which is included in
+                the total amount
+              format: double
+            worstCaseEIR:
+              type: number
+              description: Effective interest rate calculated with worst case interest
+                rate
+              format: double
+            worstCaseInstalment:
+              type: number
+              description: Instalment calculated with worst case interest rate. MAX(phase1,
+                phase2, customer instalment)
+              format: double
+          required:
+          - bankingActInsurance
+          description: Result add ons for full calculation
+        amortizationScheduleLine:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: Date of amortization schedule row
+                format: date
+              instalment:
+                type: number
+                description: Instalment
+                format: double
+              interest:
+                type: number
+                description: Interest
+                format: double
+              amortization:
+                type: number
+                description: Amortization
+                format: double
+              fee:
+                type: number
+                description: Fee
+                format: double
+              residualDebt:
+                type: number
+                description: Residual debt
+                format: double
+              outPayment:
+                type: number
+                description: Outpayment
+                format: double
+              specialAmortization:
+                type: number
+                description: Special payment
+                format: double
+              interestPartCancellation:
+                type: number
+                description: Interest part of canellation
+                format: double
+              interestRate:
+                type: number
+                description: Interest rate
+                format: double
+              rowInfo:
+                type: string
+                description: Information if the row contains an instalment
+              settlementInfo:
+                type: string
+                description: Information if the row contaisn a closing
+            required:
+            - date
+            - instalment
+            - interest
+            - amortization
+            - fee
+            - residualDebt
+            - outPayment
+            - specialAmortization
+            - interestPartCancellation
+            - interestRate
+            - rowInfo
+            - settlementInfo
+          description: List of amortization schedule lines
+        specialAgreement:
+          type: array
+          items:
+            type: object
+            properties:
+              specialAgreement:
+                type: number
+                description: amount of the special agreemnet
+                format: double
+              percSpecialAgreement:
+                type: number
+                description: percentage of the special agreement
+                format: double
+              interestPartCancellation:
+                type: number
+                description: Interest part of canellation
+                format: double
+              startDate:
+                type: string
+                description: Start date of the special agreement
+                format: date
+              endDate:
+                type: string
+                description: End date of the special agreement
+                format: date
+              valueDateInstalment:
+                type: string
+                description: ''
+                format: date
+              occurrence:
+                type: integer
+                description: Number of occurrences
+                format: int32
+              period:
+                type: string
+                description: Periodicity of the special agreement
+              capitalisation:
+                type: boolean
+                description: Flag if capitalisation for interest is done
+                format: boolean
+              agreementType:
+                type: string
+                description: Type of specail agreement
+              untilEndOfTerm:
+                type: boolean
+                description: Flag if the special agreement is valuid until end of
+                  term
+                format: boolean
+              ultimo:
+                type: boolean
+                description: Flag if the special agrrement is applied always at ultimo
+                format: boolean
+              directDebit:
+                type: boolean
+                description: Flag if special agreement is invoiced using direct debit
+                format: boolean
+            required:
+            - startDate
+            - period
+            - capitalisation
+            - agreementType
+            - untilEndOfTerm
+            - ultimo
+            - directDebit
+          description: List of special agreements, if control is set to yes
+        creditLine:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: number
+                description: amount at that date
+                format: double
+              valueDate:
+                type: string
+                description: value date
+                format: date
+              creditLineEvent:
+                type: string
+                description: Specifies the event type
+              directDebit:
+                type: boolean
+                description: Flag if amout is direct debited
+                format: boolean
+            required:
+            - amount
+            - valueDate
+            - creditLineEvent
+            - directDebit
+          description: List of credit lines, if control is set to yes.
+        amortizationScheduleLineESIS:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: Date of amortization schedule row
+                format: date
+              dateTotalFrom:
+                type: string
+                description: Start date of the periode if lines are summed up
+                format: date
+              dateTotalTo:
+                type: string
+                description: End date of the periode if lines are summed up
+                format: date
+              instalment:
+                type: number
+                description: Instalment
+                format: double
+              interest:
+                type: number
+                description: Interest
+                format: double
+              amortization:
+                type: number
+                description: Amortization
+                format: double
+              fee:
+                type: number
+                description: Fee
+                format: double
+              residualDebt:
+                type: number
+                description: Residual debt
+                format: double
+              outPayment:
+                type: number
+                description: Outpayment
+                format: double
+              hyphothetical:
+                type: boolean
+                description: Flag if instalmet is fixed or hypothetical
+                format: boolean
+              lineType:
+                type: string
+                description: Information Standard, year total, tolal
+              comment:
+                type: string
+                description: Comment for printing
+                maxLength: 80
+            required:
+            - date
+            - dateTotalFrom
+            - dateTotalTo
+            - instalment
+            - interest
+            - amortization
+            - fee
+            - residualDebt
+            - outPayment
+            - hyphothetical
+            - lineType
+            - comment
+          description: List of amortization schedule lines ESIS, if control is set
+            to yes
+      required:
+      - calcSuccessful
+      - loanCalcResult
+    LoanCalcResultV3:
+      type: object
+      properties:
+        instalment:
+          type: number
+          description: Instalment
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate. Field is supported if calculationObject = INTEREST_RATE.
+            Otherwise it is empty
+          format: double
+        instalmentStart:
+          type: number
+          description: First instalment of amortization schedule
+          format: double
+        instalmentFinal:
+          type: number
+          description: Last instalment of amortization schedule
+          format: double
+        residualValue:
+          type: number
+          description: Residual value
+          format: double
+        totalCost:
+          type: number
+          description: Amount of total costs
+          format: double
+        overallExposure:
+          type: number
+          description: Overall exposure
+          format: double
+        effectiveInterestRate:
+          type: number
+          description: Effective interest rate. Field is supported if calcEffectiveInterestRate=true.
+            Otherwise it si emtpy.
+          format: double
+        totalInterestRate:
+          type: number
+          description: Total interest rate
+          format: double
+        interestPaymentStart:
+          type: string
+          description: Date when the interest paymnet starts
+          format: date
+        loanEndDate:
+          type: string
+          description: End date of the loan
+          format: date
+        termMonths:
+          type: integer
+          description: Number of months which specifies the term of the loan
+          format: int32
+        termInstalments:
+          type: integer
+          description: Number of instalments which specifies the term of the loan
+          format: int32
+        totalInterest:
+          type: number
+          description: Total sum of interest
+          format: double
+        residualDebt:
+          type: number
+          description: Residual debt
+          format: double
+        accountClosureItem:
+          type: number
+          description: Amount of account closure from the last account closure to
+            start of calculation
+          format: double
+        totalAmortization:
+          type: number
+          description: Total sum of amortization
+          format: double
+        bankingActTotalCost:
+          type: number
+          description: Total cost = sum of interest, fees and insurance premium
+          format: double
+        bankingActTotalAmount:
+          type: number
+          description: Total amount = sum of amortization, interest and fees
+          format: double
+        bankingActTotalLoanAmount:
+          type: number
+          description: Total loan amount
+          format: double
+        nextSettlementDate:
+          type: string
+          description: Next settlement date that is used in the calculation
+          format: date
+      required:
+      - instalment
+      - instalmentStart
+      - instalmentFinal
+      - residualValue
+      - totalCost
+      - overallExposure
+      - interestPaymentStart
+      - loanEndDate
+      - termMonths
+      - termInstalments
+      - totalInterest
+      - residualDebt
+      - accountClosureItem
+      - totalAmortization
+      - bankingActTotalCost
+      - bankingActTotalAmount
+      - bankingActTotalLoanAmount
+      - nextSettlementDate
+    AmortizationScheduleLineV3:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date of amortization schedule row
+          format: date
+        instalment:
+          type: number
+          description: Instalment
+          format: double
+        interest:
+          type: number
+          description: Interest
+          format: double
+        amortization:
+          type: number
+          description: Amortization
+          format: double
+        fee:
+          type: number
+          description: Fee
+          format: double
+        residualDebt:
+          type: number
+          description: Residual debt
+          format: double
+        outPayment:
+          type: number
+          description: Outpayment
+          format: double
+        specialAmortization:
+          type: number
+          description: Special payment
+          format: double
+        interestPartCancellation:
+          type: number
+          description: Interest part of canellation
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate
+          format: double
+        rowInfo:
+          type: string
+          description: Information if the row contains an instalment
+        settlementInfo:
+          type: string
+          description: Information if the row contaisn a closing
+      required:
+      - date
+      - instalment
+      - interest
+      - amortization
+      - fee
+      - residualDebt
+      - outPayment
+      - specialAmortization
+      - interestPartCancellation
+      - interestRate
+      - rowInfo
+      - settlementInfo
+    CalculationControlV3:
+      type: object
+      properties:
+        paymentPlan:
+          type: boolean
+          description: If true, Payment plan is calculated and in the result
+          format: boolean
+        creditLineTrend:
+          type: boolean
+          description: if true, credit line trend is calculated an in the result
+          format: boolean
+        paymentPlanESIS:
+          type: boolean
+          description: if true, Payment plan ESIS is calculated and in the result
+          format: boolean
+      required:
+      - paymentPlan
+      - creditLineTrend
+      - paymentPlanESIS
+    AmortizationScheduleLineV2:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date of amortization schedule row
+          format: date
+        instalment:
+          type: number
+          description: Instalment
+          format: double
+        interest:
+          type: number
+          description: Interest
+          format: double
+        amortization:
+          type: number
+          description: Amortization
+          format: double
+        fee:
+          type: number
+          description: Fee
+          format: double
+        residualDebt:
+          type: number
+          description: Residual debt
+          format: double
+        outPayment:
+          type: number
+          description: Outpayment
+          format: double
+        specialAmortization:
+          type: number
+          description: Special payment
+          format: double
+        interestPartCancellation:
+          type: number
+          description: Interest part of canellation
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate
+          format: double
+        rowInfo:
+          type: string
+          description: Information if the row contains an instalment
+        settlementInfo:
+          type: string
+          description: Information if the row contaisn a closing
+      required:
+      - date
+      - instalment
+      - interest
+      - amortization
+      - fee
+      - residualDebt
+      - outPayment
+      - specialAmortization
+      - interestPartCancellation
+      - interestRate
+      - rowInfo
+      - settlementInfo
+    LoanCalcHeaderV3:
+      type: object
+      properties:
+        loanType:
+          type: string
+          description: Specifies the base type of a loan
+        calcEffectiveInterestRate:
+          type: boolean
+          description: Effective interest rate is calculated as a result
+          format: boolean
+        termType:
+          type: string
+          description: Specifies how the end date of the loan is defined
+        termMonths:
+          type: integer
+          description: Number of months which specifies the term of the loan. See
+            termType
+          format: int32
+        termInstalments:
+          type: integer
+          description: Number of instalments which specifies the term of the loan.
+            See termType
+          format: int32
+        loanEndDate:
+          type: string
+          description: Loan end date, when a fixed date is used. See termType
+          format: date
+        loanAmount:
+          type: number
+          description: Loan amount
+          format: double
+        instalment:
+          type: number
+          description: Instalment if it is used for calculation
+          format: double
+        residualValue:
+          type: number
+          description: Residual value for calculation
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate for calculation (change of interest rate). If
+            no change fill with the same value as interestRateOld
+          format: double
+        calculationObject:
+          type: string
+          description: Defines which part of the loan is calculated
+        instalmentType:
+          type: string
+          description: Type of instalment calculation
+        interestDaysMode:
+          type: string
+          description: Interest days for the calculation of account closure
+        interestCalcMethod:
+          type: string
+          description: Calculation of interest anticipative or decursive
+        interestCalcPeriod:
+          type: string
+          description: Defines the periodicity of the interest rate
+        instalmentRoundingType:
+          type: string
+          description: Rounding of the instalment
+        instalmentRoundingLimit:
+          type: string
+          description: Rounding limit of the instalment
+        payoutDate:
+          type: string
+          description: Date when the payout takes place
+          format: date
+        repaymentStart:
+          type: string
+          description: Date when the first repayment is done
+          format: date
+        repaymentUltimo:
+          type: boolean
+          description: Repayment always takes place at ultimo
+          format: boolean
+        repaymentPeriod:
+          type: string
+          description: Period of repayment
+        nextSettlementDate:
+          type: string
+          description: Date when the next account settlement takes place. If empty
+            and closing period is 1,2,3 then it is calculated based on payoutDate
+          format: date
+        settlementPeriod:
+          type: string
+          description: Period of interest amortization
+        settlementUltimo:
+          type: boolean
+          description: Settlement of account always takes place at ultimo
+          format: boolean
+        settlementMonth:
+          type: integer
+          description: Number of months when closing takes place, when closing period
+            is reference date
+          format: int32
+        followUpInterestRate:
+          type: number
+          description: Follow-up interest rate e.g. for fixed interest rate follow
+            by an indexed one
+          format: double
+        followUpStartDate:
+          type: string
+          description: Start date when the follow-up interest rate is considered in
+            the calculation
+          format: date
+        interestCapitalisation:
+          type: boolean
+          description: Flag how to handle interst within an amortization free period
+          format: boolean
+      required:
+      - loanType
+      - calcEffectiveInterestRate
+      - termType
+      - loanAmount
+      - calculationObject
+      - instalmentType
+      - interestDaysMode
+      - interestCalcMethod
+      - interestCalcPeriod
+      - instalmentRoundingType
+      - instalmentRoundingLimit
+      - payoutDate
+      - repaymentStart
+      - repaymentUltimo
+      - repaymentPeriod
+      - settlementPeriod
+      - settlementUltimo
+      - interestCapitalisation
+    OneTimeFeeV3:
+      type: object
+      properties:
+        oneTimeFee:
+          type: number
+          description: Amount of the one-time fee
+          format: double
+        name:
+          type: string
+          description: Name of the one-time fee
+          maxLength: 50
+        feeChargeType:
+          type: string
+          description: Type how the fee is charged
+        effectsEIR:
+          type: boolean
+          description: If true, one-time fee is considered in EIR calculation
+          format: boolean
+      required:
+      - oneTimeFee
+      - feeChargeType
+      - effectsEIR
+    LoanAmountResultV3:
+      type: object
+      properties:
+        loanAmount:
+          type: number
+          description: Calculated Loan amount
+          format: double
+      required:
+      - loanAmount
+    LoanAmountHeaderV2:
+      type: object
+      properties:
+        loanType:
+          type: string
+          description: Specifies the base type of a loan
+        termType:
+          type: string
+          description: Specifies how the end date of the loan is defined
+        termMonths:
+          type: integer
+          description: Number of months which specifies the term of the loan. See
+            termType
+          format: int32
+        termInstalments:
+          type: integer
+          description: Number of instalments which specifies the term of the loan.
+            See termType
+          format: int32
+        loanEndDate:
+          type: string
+          description: Loan end date, when a fixed date is used. See termType
+          format: date
+        instalment:
+          type: number
+          description: Instalment wihicch is used for calculation of the loan amount
+          format: double
+        residualValue:
+          type: number
+          description: Residual value for calculation
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate for calculation
+          format: double
+        instalmentType:
+          type: string
+          description: Type of instalment calculation
+        interestDaysMode:
+          type: string
+          description: Interest days for the calculation of account closure
+        interestCalcMethod:
+          type: string
+          description: Calculation of interest anticipative or decursive
+        interestCalcPeriod:
+          type: string
+          description: Defines the periodicity of the interest rate
+        instalmentRoundingType:
+          type: string
+          description: Rounding of the instalment
+        instalmentRoundingLimit:
+          type: string
+          description: Rounding limit of the instalment
+        payoutDate:
+          type: string
+          description: Date when the payout takes place
+          format: date
+        repaymentStart:
+          type: string
+          description: Date when the first repayment is done
+          format: date
+        repaymentUltimo:
+          type: boolean
+          description: Repayment always takes place at ultimo
+          format: boolean
+        repaymentPeriod:
+          type: string
+          description: Period of repayment
+        nextSettlementDate:
+          type: string
+          description: Date when the next account settlement takes place. If empty
+            and closing period is 1,2,3 then it is calculated based on payoutDate
+          format: date
+        settlementPeriod:
+          type: string
+          description: Period of interest amortization
+        settlementUltimo:
+          type: boolean
+          description: Settlement of account always takes place at ultimo
+          format: boolean
+        settlementMonth:
+          type: integer
+          description: Number of months when closing takes place, when closing period
+            is reference date
+          format: int32
+        interestCapitalisation:
+          type: boolean
+          description: Flag how to handle interst within an amortization free period
+          format: boolean
+      required:
+      - loanType
+      - termType
+      - instalment
+      - interestRate
+      - instalmentType
+      - interestDaysMode
+      - interestCalcMethod
+      - interestCalcPeriod
+      - instalmentRoundingType
+      - instalmentRoundingLimit
+      - payoutDate
+      - repaymentStart
+      - repaymentUltimo
+      - repaymentPeriod
+      - settlementPeriod
+      - settlementUltimo
+      - interestCapitalisation
+    CreditLineV3:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: amount at that date
+          format: double
+        valueDate:
+          type: string
+          description: value date
+          format: date
+        creditLineEvent:
+          type: string
+          description: Specifies the event type
+        directDebit:
+          type: boolean
+          description: Flag if amout is direct debited
+          format: boolean
+      required:
+      - amount
+      - valueDate
+      - creditLineEvent
+      - directDebit
+    CalculationControlV2:
+      type: object
+      properties:
+        paymentPlan:
+          type: boolean
+          description: If true, Payment plan is calculated and in the result
+          format: boolean
+        creditLineTrend:
+          type: boolean
+          description: if true, credit line trend is calculated an in the result
+          format: boolean
+      required:
+      - paymentPlan
+      - creditLineTrend
+    LoanCalcReturnInfoV3:
+      type: object
+      properties:
+        returnID:
+          type: string
+          description: Error number
+          maxLength: 50
+        returnText:
+          type: string
+          description: Textual error description
+          maxLength: 256
+        returnCategory:
+          type: string
+          description: Category, defines in which area the error occured
+          maxLength: 50
+      required:
+      - returnID
+      - returnText
+      - returnCategory
+    InsuranceForEIRV3:
+      type: object
+      properties:
+        premium:
+          type: number
+          description: Premium of the insurance
+          format: double
+        insuranceStartDate:
+          type: string
+          description: Date of the appearance of a one-time premium or start date
+            for periodic premiums
+          format: date
+        insuranceEndDate:
+          type: string
+          description: End date for periodic premiums. Either endDate, TermMonth or
+            lastUntilEnd must be filled for periodic premiums
+          format: date
+        insuranceTermMonth:
+          type: integer
+          description: Term in months. Either endDate, TermMonth or lastUntilEnd must
+            be filled for periodic premiums
+          format: int32
+        lastUntilEnd:
+          type: boolean
+          description: If true, premium is valid until the end of the loan
+          format: boolean
+        insurancePeriod:
+          type: string
+          description: Periodictiy of the premium
+      required:
+      - premium
+      - insuranceStartDate
+      - lastUntilEnd
+      - insurancePeriod
+    PeriodicFeeFixedAmountV3:
+      type: object
+      properties:
+        periodicFee:
+          type: number
+          description: Amount of the periodic fee
+          format: double
+        name:
+          type: string
+          description: Description of the fee
+          maxLength: 50
+        calcBase:
+          type: string
+          description: Moment when the fee is charged, e.g. per closing
+        period:
+          type: string
+          description: Period in which the fee is charged. If empty, then the closing
+            period of the calculation header is used.
+        effectsEIR:
+          type: boolean
+          description: If true, fee is considered in EIR calculation
+          format: boolean
+        effectsAmortization:
+          type: boolean
+          description: If true, fee is considered in amortization schedule. Usually
+            true, e.g. for Kontokondition false
+          format: boolean
+      required:
+      - periodicFee
+      - calcBase
+      - effectsEIR
+      - effectsAmortization
+    LoanCalcHeaderAddOnV3:
+      type: object
+      properties:
+        loanState:
+          type: string
+          description: State of the loan
+        latestRepayment:
+          type: string
+          description: Amortization schedule stops at that date and the residual payment
+            at that date covers the outstanding amount.
+          format: date
+        stepUpAmount:
+          type: number
+          description: Step-up amount
+          format: double
+        accountSettlementItem:
+          type: number
+          description: Amount of account closure from the last account closure to
+            start of calculation
+          format: double
+        interestRateOld:
+          type: number
+          description: Interest rate for calculation (change of interest rate). If
+            no change fill with the same value as interestRate
+          format: double
+        interestChangeDate:
+          type: string
+          description: Date of interest change. If no change leave empty
+          format: date
+        interestPaymentStart:
+          type: string
+          description: Date from which on interest is caluclated
+          format: date
+        instalmentFreezeDays:
+          type: integer
+          description: Number of days at start of amortization schedule, where instalment
+            stays the same
+          format: int32
+        keepExistingInstalment:
+          type: boolean
+          description: Flag, if the installment at start of amortization schedule
+            stay unchanged
+          format: boolean
+        consumerProtectionCode:
+          type: string
+          description: Information which type of consumer protection is used
+        effectiveInterestDaysMode:
+          type: string
+          description: Interest days method for the calculation of the effective interest
+            rate
+        worstCaseEIR:
+          type: boolean
+          description: If true, a worstCase effective interest rate is calculated
+          format: boolean
+        worstCaseInterestRatePhase1:
+          type: number
+          description: Interest rate to calculate the worstCase effective interest
+            rate
+          format: double
+        worstCaseInterestRatePhase2:
+          type: number
+          description: Follow-up worstCase interest rate e.g. for fixed interest rate
+            followed by an indexed one
+          format: double
+        worstCasePhase2StartDate:
+          type: string
+          description: Start date when the phase 2 worstCase interest rate is considered
+            in worsCaseEIR calculation
+          format: date
+        repaymentType:
+          type: string
+          description: Used for setting direct debit in creditLine result. If creditLineTrend
+            is true, field is mandatory
+        hypotheticalInstalmentDate:
+          type: string
+          description: Used to mark hypothetical instalments in ESIS amortization
+            schedule
+          format: date
+      required:
+      - loanState
+      - keepExistingInstalment
+      - consumerProtectionCode
+      - effectiveInterestDaysMode
+      - worstCaseEIR
+    LoanAmountInputV2:
+      type: object
+      properties:
+        loanAmountHeader:
+          type: object
+          properties:
+            loanType:
+              type: string
+              description: Specifies the base type of a loan
+            termType:
+              type: string
+              description: Specifies how the end date of the loan is defined
+            termMonths:
+              type: integer
+              description: Number of months which specifies the term of the loan.
+                See termType
+              format: int32
+            termInstalments:
+              type: integer
+              description: Number of instalments which specifies the term of the loan.
+                See termType
+              format: int32
+            loanEndDate:
+              type: string
+              description: Loan end date, when a fixed date is used. See termType
+              format: date
+            instalment:
+              type: number
+              description: Instalment wihicch is used for calculation of the loan
+                amount
+              format: double
+            residualValue:
+              type: number
+              description: Residual value for calculation
+              format: double
+            interestRate:
+              type: number
+              description: Interest rate for calculation
+              format: double
+            instalmentType:
+              type: string
+              description: Type of instalment calculation
+            interestDaysMode:
+              type: string
+              description: Interest days for the calculation of account closure
+            interestCalcMethod:
+              type: string
+              description: Calculation of interest anticipative or decursive
+            interestCalcPeriod:
+              type: string
+              description: Defines the periodicity of the interest rate
+            instalmentRoundingType:
+              type: string
+              description: Rounding of the instalment
+            instalmentRoundingLimit:
+              type: string
+              description: Rounding limit of the instalment
+            payoutDate:
+              type: string
+              description: Date when the payout takes place
+              format: date
+            repaymentStart:
+              type: string
+              description: Date when the first repayment is done
+              format: date
+            repaymentUltimo:
+              type: boolean
+              description: Repayment always takes place at ultimo
+              format: boolean
+            repaymentPeriod:
+              type: string
+              description: Period of repayment
+            nextSettlementDate:
+              type: string
+              description: Date when the next account settlement takes place. If empty
+                and closing period is 1,2,3 then it is calculated based on payoutDate
+              format: date
+            settlementPeriod:
+              type: string
+              description: Period of interest amortization
+            settlementUltimo:
+              type: boolean
+              description: Settlement of account always takes place at ultimo
+              format: boolean
+            settlementMonth:
+              type: integer
+              description: Number of months when closing takes place, when closing
+                period is reference date
+              format: int32
+            interestCapitalisation:
+              type: boolean
+              description: Flag how to handle interst within an amortization free
+                period
+              format: boolean
+          required:
+          - loanType
+          - termType
+          - instalment
+          - interestRate
+          - instalmentType
+          - interestDaysMode
+          - interestCalcMethod
+          - interestCalcPeriod
+          - instalmentRoundingType
+          - instalmentRoundingLimit
+          - payoutDate
+          - repaymentStart
+          - repaymentUltimo
+          - repaymentPeriod
+          - settlementPeriod
+          - settlementUltimo
+          - interestCapitalisation
+          description: Header for loan amount calculation
+        periodicFeePercentage:
+          type: array
+          items:
+            type: object
+            properties:
+              rate:
+                type: number
+                description: Percentage of the fee which is considered at closing.
+                  Calculated based calcBase. Fee is charged in the period of the interest
+                  rate
+                format: double
+              name:
+                type: string
+                description: Description of the fee
+                maxLength: 50
+              calcBase:
+                type: string
+                description: Base value which is used for calculation
+              period:
+                type: string
+                description: Defines the periodicity of the rate
+              effectsEIR:
+                type: boolean
+                description: If true, fee is considered in EIR calculation
+                format: boolean
+            required:
+            - rate
+            - calcBase
+            - period
+            - effectsEIR
+          description: List of periodic fees calculated based on an percentage
+        periodicFeeFixedAmount:
+          type: array
+          items:
+            type: object
+            properties:
+              periodicFee:
+                type: number
+                description: Amount of the periodic fee
+                format: double
+              name:
+                type: string
+                description: Description of the fee
+                maxLength: 50
+              calcBase:
+                type: string
+                description: Moment when the fee is charged, e.g. per closing
+              period:
+                type: string
+                description: Period in which the fee is charged. If empty, then the
+                  closing period of the calculation header is used.
+              effectsEIR:
+                type: boolean
+                description: If true, fee is considered in EIR calculation
+                format: boolean
+              effectsAmortization:
+                type: boolean
+                description: If true, fee is considered in amortization schedule.
+                  Usually true, e.g. for Kontokondition false
+                format: boolean
+            required:
+            - periodicFee
+            - calcBase
+            - effectsEIR
+            - effectsAmortization
+          description: List of periodic fees with fixed amount
+    LoanCalcResult:
+      type: object
+      properties:
+        instalment:
+          type: number
+          description: Instalment
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate
+          format: double
+        instalmentStart:
+          type: number
+          description: First instalment of amortisation schedule
+          format: double
+        instalmentFinal:
+          type: number
+          description: Last instalment of amortisation schedule
+          format: double
+        residualValue:
+          type: number
+          description: Residual value
+          format: double
+        totalCost:
+          type: number
+          description: Amount of total costs
+          format: double
+        overallExposure:
+          type: number
+          description: Overall exposure
+          format: double
+        effectiveInterestRate:
+          type: number
+          description: Effective interest rate
+          format: double
+        totalInterestRate:
+          type: number
+          description: Total interest rate
+          format: double
+        interestPaymnetStart:
+          type: string
+          description: Date when the interest paymnet starts
+          format: date
+        loanEndDate:
+          type: string
+          description: End date of the loan
+          format: date
+        termMonths:
+          type: integer
+          description: Number of months which specifies the term of the loan
+          format: int32
+        termInstalments:
+          type: integer
+          description: Number of instalments which specifies the term of the loan
+          format: int32
+        totalInterest:
+          type: number
+          description: Total sum of interest
+          format: double
+        residualDebt:
+          type: number
+          description: Residual debt
+          format: double
+        accountClosureItem:
+          type: number
+          description: Amount of account closure from the last account closure to
+            start of calculation
+          format: double
+        totalAmortisation:
+          type: number
+          description: Total sum of amortisation
+          format: double
+        bankingActTotalCost:
+          type: number
+          description: Total cost = sum of interest and fees
+          format: double
+        bankingActTotalAmount:
+          type: number
+          description: Total amount = sum of amortisation, interest and fees
+          format: double
+        bankingActTotalLoanAmount:
+          type: number
+          description: Total loan amount
+          format: double
+    LoanAmountInputV3:
+      type: object
+      properties:
+        loanAmountHeader:
+          type: object
+          properties:
+            loanType:
+              type: string
+              description: Specifies the base type of a loan
+            termType:
+              type: string
+              description: Specifies how the end date of the loan is defined
+            termMonths:
+              type: integer
+              description: Number of months which specifies the term of the loan.
+                See termType
+              format: int32
+            termInstalments:
+              type: integer
+              description: Number of instalments which specifies the term of the loan.
+                See termType
+              format: int32
+            loanEndDate:
+              type: string
+              description: Loan end date, when a fixed date is used. See termType
+              format: date
+            instalment:
+              type: number
+              description: Instalment wihicch is used for calculation of the loan
+                amount
+              format: double
+            residualValue:
+              type: number
+              description: Residual value for calculation
+              format: double
+            interestRate:
+              type: number
+              description: Interest rate for calculation
+              format: double
+            instalmentType:
+              type: string
+              description: Type of instalment calculation
+            interestDaysMode:
+              type: string
+              description: Interest days for the calculation of account closure
+            interestCalcMethod:
+              type: string
+              description: Calculation of interest anticipative or decursive
+            interestCalcPeriod:
+              type: string
+              description: Defines the periodicity of the interest rate
+            instalmentRoundingType:
+              type: string
+              description: Rounding of the instalment
+            instalmentRoundingLimit:
+              type: string
+              description: Rounding limit of the instalment
+            payoutDate:
+              type: string
+              description: Date when the payout takes place
+              format: date
+            repaymentStart:
+              type: string
+              description: Date when the first repayment is done
+              format: date
+            repaymentUltimo:
+              type: boolean
+              description: Repayment always takes place at ultimo
+              format: boolean
+            repaymentPeriod:
+              type: string
+              description: Period of repayment
+            nextSettlementDate:
+              type: string
+              description: Date when the next account settlement takes place. If empty
+                and closing period is 1,2,3 then it is calculated based on payoutDate
+              format: date
+            settlementPeriod:
+              type: string
+              description: Period of interest amortization
+            settlementUltimo:
+              type: boolean
+              description: Settlement of account always takes place at ultimo
+              format: boolean
+            settlementMonth:
+              type: integer
+              description: Number of months when closing takes place, when closing
+                period is reference date
+              format: int32
+            interestCapitalisation:
+              type: boolean
+              description: Flag how to handle interst within an amortization free
+                period
+              format: boolean
+          required:
+          - loanType
+          - termType
+          - instalment
+          - interestRate
+          - instalmentType
+          - interestDaysMode
+          - interestCalcMethod
+          - interestCalcPeriod
+          - instalmentRoundingType
+          - instalmentRoundingLimit
+          - payoutDate
+          - repaymentStart
+          - repaymentUltimo
+          - repaymentPeriod
+          - settlementPeriod
+          - settlementUltimo
+          - interestCapitalisation
+          description: Header for loan amount calculation
+        periodicFeePercentage:
+          type: array
+          items:
+            type: object
+            properties:
+              rate:
+                type: number
+                description: Percentage of the fee which is considered at closing.
+                  Calculated based calcBase. Fee is charged in the period of the interest
+                  rate
+                format: double
+              name:
+                type: string
+                description: Description of the fee
+                maxLength: 50
+              calcBase:
+                type: string
+                description: Base value which is used for calculation
+              period:
+                type: string
+                description: Defines the periodicity of the rate
+              effectsEIR:
+                type: boolean
+                description: If true, fee is considered in EIR calculation
+                format: boolean
+            required:
+            - rate
+            - calcBase
+            - period
+            - effectsEIR
+          description: List of periodic fees calculated based on an percentage
+        periodicFeeFixedAmount:
+          type: array
+          items:
+            type: object
+            properties:
+              periodicFee:
+                type: number
+                description: Amount of the periodic fee
+                format: double
+              name:
+                type: string
+                description: Description of the fee
+                maxLength: 50
+              calcBase:
+                type: string
+                description: Moment when the fee is charged, e.g. per closing
+              period:
+                type: string
+                description: Period in which the fee is charged. If empty, then the
+                  closing period of the calculation header is used.
+              effectsEIR:
+                type: boolean
+                description: If true, fee is considered in EIR calculation
+                format: boolean
+              effectsAmortization:
+                type: boolean
+                description: If true, fee is considered in amortization schedule.
+                  Usually true, e.g. for Kontokondition false
+                format: boolean
+            required:
+            - periodicFee
+            - calcBase
+            - effectsEIR
+            - effectsAmortization
+          description: List of periodic fees with fixed amount
+    InsuranceForEIRV2:
+      type: object
+      properties:
+        premium:
+          type: number
+          description: Premium of the insurance
+          format: double
+        insuranceStartDate:
+          type: string
+          description: Date of the appearance of a one-time premium or start date
+            for periodic premiums
+          format: date
+        insuranceEndDate:
+          type: string
+          description: End date for periodic premiums. Either endDate, TermMonth or
+            lastUntilEnd must be filled for periodic premiums
+          format: date
+        insuranceTermMonth:
+          type: integer
+          description: Term in months. Either endDate, TermMonth or lastUntilEnd must
+            be filled for periodic premiums
+          format: int32
+        lastUntilEnd:
+          type: boolean
+          description: If true, premium is valid until the end of the loan
+          format: boolean
+        insurancePeriod:
+          type: string
+          description: Periodictiy of the premium
+      required:
+      - premium
+      - insuranceStartDate
+      - lastUntilEnd
+      - insurancePeriod
+    LoanCalcSimpleOutput:
+      type: object
+      properties:
+        calcSuccessfull:
+          type: boolean
+          description: Information if the calculation was successfull or not
+          format: boolean
+        returnInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              returnID:
+                type: string
+                description: Error number
+                maxLength: 50
+              returnText:
+                type: string
+                description: Textual error description
+                maxLength: 256
+          description: Errors and warnings as additional information of result of
+            the calculation
+        loanCalcResult:
+          type: object
+          properties:
+            instalment:
+              type: number
+              description: Instalment
+              format: double
+            interestRate:
+              type: number
+              description: Interest rate
+              format: double
+            instalmentStart:
+              type: number
+              description: First instalment of amortisation schedule
+              format: double
+            instalmentFinal:
+              type: number
+              description: Last instalment of amortisation schedule
+              format: double
+            residualValue:
+              type: number
+              description: Residual value
+              format: double
+            totalCost:
+              type: number
+              description: Amount of total costs
+              format: double
+            overallExposure:
+              type: number
+              description: Overall exposure
+              format: double
+            effectiveInterestRate:
+              type: number
+              description: Effective interest rate
+              format: double
+            totalInterestRate:
+              type: number
+              description: Total interest rate
+              format: double
+            interestPaymnetStart:
+              type: string
+              description: Date when the interest paymnet starts
+              format: date
+            loanEndDate:
+              type: string
+              description: End date of the loan
+              format: date
+            termMonths:
+              type: integer
+              description: Number of months which specifies the term of the loan
+              format: int32
+            termInstalments:
+              type: integer
+              description: Number of instalments which specifies the term of the loan
+              format: int32
+            totalInterest:
+              type: number
+              description: Total sum of interest
+              format: double
+            residualDebt:
+              type: number
+              description: Residual debt
+              format: double
+            accountClosureItem:
+              type: number
+              description: Amount of account closure from the last account closure
+                to start of calculation
+              format: double
+            totalAmortisation:
+              type: number
+              description: Total sum of amortisation
+              format: double
+            bankingActTotalCost:
+              type: number
+              description: Total cost = sum of interest and fees
+              format: double
+            bankingActTotalAmount:
+              type: number
+              description: Total amount = sum of amortisation, interest and fees
+              format: double
+            bankingActTotalLoanAmount:
+              type: number
+              description: Total loan amount
+              format: double
+    LoanCalcHeader:
+      type: object
+      properties:
+        loanType:
+          type: string
+          enum:
+          - A
+          - D
+          - R
+          - S
+          description: Specifies the base type of a loan
+        calcEffectiveInterestRate:
+          type: boolean
+          description: Effective interest rate is calculated as a result
+          format: boolean
+        termType:
+          type: string
+          enum:
+          - M
+          - R
+          - E
+          description: Specifies how the end date of the loan is defined
+        termMonths:
+          type: integer
+          description: Number of months which specifies the term of the loan. See
+            termType
+          format: int32
+        termInstalments:
+          type: integer
+          description: Number of instalments which specifies the term of the loan.
+            See termType
+          format: int32
+        loanEndDate:
+          type: string
+          description: Loan end date, when a fixed date is used. See termType
+          format: date
+        loanAmount:
+          type: number
+          description: Loan amount
+          format: double
+        instalment:
+          type: number
+          description: Instalment if it is used for calculation
+          format: double
+        residualValue:
+          type: number
+          description: Residual value for calculation
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate for calculation (change of interest rate). If
+            no change fill with the same value as interestRateOld
+          format: double
+        calculationObject:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          description: Defines which part of the loan is calculated
+        instalmentType:
+          type: string
+          enum:
+          - '0'
+          - '1'
+          - '2'
+          - '3'
+          description: Type of instalment calculation
+        interestDaysMode:
+          type: string
+          enum:
+          - '0'
+          - '1'
+          - '2'
+          - '3'
+          description: Interest days for the calculation of account closure
+        interestCalcMethod:
+          type: string
+          enum:
+          - ANT
+          - DEK
+          description: Calculation of interest anticipative or decursive
+        interestCalcPeriode:
+          type: string
+          enum:
+          - A
+          - M
+          - Q
+          - D
+          - '7'
+          - S
+          description: Defines the periodicity of the interest rate
+        instalmentRoundingType:
+          type: string
+          enum:
+          - kfm
+          - or
+          - auf
+          - ab
+          description: Rounding of the instalment
+        instalmentRoundingLimit:
+          type: string
+          enum:
+          - hdt
+          - zhn
+          - ein
+          - znt
+          - htd
+          description: Rounding limit of the instalment
+        payoutDate:
+          type: string
+          description: Date when the payout takes place
+          format: date
+        repaymentStart:
+          type: string
+          description: Date when the first repayment is done
+          format: date
+        repaymentUltimo:
+          type: boolean
+          description: Repayment always takes place at ultimo
+          format: boolean
+        repaymentPeriode:
+          type: string
+          enum:
+          - '0'
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          description: Periode of repayment
+        nextClosingDate:
+          type: string
+          description: Date when the next account closure takes place
+          format: date
+        closingPeriode:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '9'
+          description: Periode of interest amortisation
+        closingUltimo:
+          type: boolean
+          description: Closing of account always takes place at ultimo
+          format: boolean
+        closingMonth:
+          type: integer
+          description: Number of months when closing takes place, when closing periode
+            is reference date
+          format: int32
+        calculationType:
+          type: string
+          enum:
+          - '0'
+          - '1'
+          - '2'
+          - '4'
+          - '8'
+          description: Control for special calculations
+        followUpInterestRate:
+          type: number
+          description: Follow-up interest rate e.g. for fixed interest rate follow
+            by an indexed one
+          format: double
+        followUpStartDate:
+          type: string
+          description: Start date when the follow-up interest rate is considered in
+            the calculation
+          format: date
+        interestCapitalisation:
+          type: boolean
+          description: Flag how to handle interst within an amortisation free periode
+          format: boolean
+      required:
+      - loanType
+      - calcEffectiveInterestRate
+      - termType
+      - loanAmount
+      - calculationObject
+      - instalmentType
+      - interestDaysMode
+      - interestCalcMethod
+      - interestCalcPeriode
+      - instalmentRoundingType
+      - instalmentRoundingLimit
+      - payoutDate
+      - repaymentStart
+      - repaymentUltimo
+      - repaymentPeriode
+      - nextClosingDate
+      - closingPeriode
+      - closingUltimo
+      - calculationType
+      - interestCapitalisation
+    AmortizationScheduleLineESISV3:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date of amortization schedule row
+          format: date
+        dateTotalFrom:
+          type: string
+          description: Start date of the periode if lines are summed up
+          format: date
+        dateTotalTo:
+          type: string
+          description: End date of the periode if lines are summed up
+          format: date
+        instalment:
+          type: number
+          description: Instalment
+          format: double
+        interest:
+          type: number
+          description: Interest
+          format: double
+        amortization:
+          type: number
+          description: Amortization
+          format: double
+        fee:
+          type: number
+          description: Fee
+          format: double
+        residualDebt:
+          type: number
+          description: Residual debt
+          format: double
+        outPayment:
+          type: number
+          description: Outpayment
+          format: double
+        hyphothetical:
+          type: boolean
+          description: Flag if instalmet is fixed or hypothetical
+          format: boolean
+        lineType:
+          type: string
+          description: Information Standard, year total, tolal
+        comment:
+          type: string
+          description: Comment for printing
+          maxLength: 80
+      required:
+      - date
+      - dateTotalFrom
+      - dateTotalTo
+      - instalment
+      - interest
+      - amortization
+      - fee
+      - residualDebt
+      - outPayment
+      - hyphothetical
+      - lineType
+      - comment
+    LoanCalcSimpleInput:
+      type: object
+      properties:
+        loanCalcHeader:
+          type: object
+          properties:
+            loanType:
+              type: string
+              enum:
+              - A
+              - D
+              - R
+              - S
+              description: Specifies the base type of a loan
+            calcEffectiveInterestRate:
+              type: boolean
+              description: Effective interest rate is calculated as a result
+              format: boolean
+            termType:
+              type: string
+              enum:
+              - M
+              - R
+              - E
+              description: Specifies how the end date of the loan is defined
+            termMonths:
+              type: integer
+              description: Number of months which specifies the term of the loan.
+                See termType
+              format: int32
+            termInstalments:
+              type: integer
+              description: Number of instalments which specifies the term of the loan.
+                See termType
+              format: int32
+            loanEndDate:
+              type: string
+              description: Loan end date, when a fixed date is used. See termType
+              format: date
+            loanAmount:
+              type: number
+              description: Loan amount
+              format: double
+            instalment:
+              type: number
+              description: Instalment if it is used for calculation
+              format: double
+            residualValue:
+              type: number
+              description: Residual value for calculation
+              format: double
+            interestRate:
+              type: number
+              description: Interest rate for calculation (change of interest rate).
+                If no change fill with the same value as interestRateOld
+              format: double
+            calculationObject:
+              type: string
+              enum:
+              - '1'
+              - '2'
+              - '3'
+              - '4'
+              - '5'
+              description: Defines which part of the loan is calculated
+            instalmentType:
+              type: string
+              enum:
+              - '0'
+              - '1'
+              - '2'
+              - '3'
+              description: Type of instalment calculation
+            interestDaysMode:
+              type: string
+              enum:
+              - '0'
+              - '1'
+              - '2'
+              - '3'
+              description: Interest days for the calculation of account closure
+            interestCalcMethod:
+              type: string
+              enum:
+              - ANT
+              - DEK
+              description: Calculation of interest anticipative or decursive
+            interestCalcPeriode:
+              type: string
+              enum:
+              - A
+              - M
+              - Q
+              - D
+              - '7'
+              - S
+              description: Defines the periodicity of the interest rate
+            instalmentRoundingType:
+              type: string
+              enum:
+              - kfm
+              - or
+              - auf
+              - ab
+              description: Rounding of the instalment
+            instalmentRoundingLimit:
+              type: string
+              enum:
+              - hdt
+              - zhn
+              - ein
+              - znt
+              - htd
+              description: Rounding limit of the instalment
+            payoutDate:
+              type: string
+              description: Date when the payout takes place
+              format: date
+            repaymentStart:
+              type: string
+              description: Date when the first repayment is done
+              format: date
+            repaymentUltimo:
+              type: boolean
+              description: Repayment always takes place at ultimo
+              format: boolean
+            repaymentPeriode:
+              type: string
+              enum:
+              - '0'
+              - '1'
+              - '2'
+              - '3'
+              - '4'
+              description: Periode of repayment
+            nextClosingDate:
+              type: string
+              description: Date when the next account closure takes place
+              format: date
+            closingPeriode:
+              type: string
+              enum:
+              - '1'
+              - '2'
+              - '3'
+              - '4'
+              - '5'
+              - '6'
+              - '9'
+              description: Periode of interest amortisation
+            closingUltimo:
+              type: boolean
+              description: Closing of account always takes place at ultimo
+              format: boolean
+            closingMonth:
+              type: integer
+              description: Number of months when closing takes place, when closing
+                periode is reference date
+              format: int32
+            calculationType:
+              type: string
+              enum:
+              - '0'
+              - '1'
+              - '2'
+              - '4'
+              - '8'
+              description: Control for special calculations
+            followUpInterestRate:
+              type: number
+              description: Follow-up interest rate e.g. for fixed interest rate follow
+                by an indexed one
+              format: double
+            followUpStartDate:
+              type: string
+              description: Start date when the follow-up interest rate is considered
+                in the calculation
+              format: date
+            interestCapitalisation:
+              type: boolean
+              description: Flag how to handle interst within an amortisation free
+                periode
+              format: boolean
+          required:
+          - loanType
+          - calcEffectiveInterestRate
+          - termType
+          - loanAmount
+          - calculationObject
+          - instalmentType
+          - interestDaysMode
+          - interestCalcMethod
+          - interestCalcPeriode
+          - instalmentRoundingType
+          - instalmentRoundingLimit
+          - payoutDate
+          - repaymentStart
+          - repaymentUltimo
+          - repaymentPeriode
+          - nextClosingDate
+          - closingPeriode
+          - closingUltimo
+          - calculationType
+          - interestCapitalisation
+    LoanCalcHeaderAddOnV2:
+      type: object
+      properties:
+        loanState:
+          type: string
+          description: State of the loan
+        latestRepayment:
+          type: string
+          description: Amortization schedule stops at that date and the residual payment
+            at that date covers the outstanding amount.
+          format: date
+        stepUpAmount:
+          type: number
+          description: Step-up amount
+          format: double
+        accountSettlementItem:
+          type: number
+          description: Amount of account closure from the last account closure to
+            start of calculation
+          format: double
+        interestRateOld:
+          type: number
+          description: Interest rate for calculation (change of interest rate). If
+            no change fill with the same value as interestRate
+          format: double
+        interestChangeDate:
+          type: string
+          description: Date of interest change. If no change leave empty
+          format: date
+        interestPaymentStart:
+          type: string
+          description: Date from which on interest is caluclated
+          format: date
+        instalmentFreezeDays:
+          type: integer
+          description: Number of days at start of amortization schedule, where instalment
+            stays the same
+          format: int32
+        keepExistingInstalment:
+          type: boolean
+          description: Flag, if the installment at start of amortization schedule
+            stay unchanged
+          format: boolean
+        consumerProtectionCode:
+          type: string
+          description: Information which type of consumer protection is used
+        effectiveInterestDaysMode:
+          type: string
+          description: Interest days method for the calculation of the effective interest
+            rate
+        worstCaseEIR:
+          type: boolean
+          description: If true, a worstCase effective interest rate is calculated
+          format: boolean
+        worstCaseInterestRatePhase1:
+          type: number
+          description: Interest rate to calculate the worstCase effective interest
+            rate
+          format: double
+        worstCaseInterestRatePhase2:
+          type: number
+          description: Follow-up worstCase interest rate e.g. for fixed interest rate
+            followed by an indexed one
+          format: double
+        worstCasePhase2StartDate:
+          type: string
+          description: Start date when the phase 2 worstCase interest rate is considered
+            in worsCaseEIR calculation
+          format: date
+        repaymentType:
+          type: string
+          description: Used for setting direct debit in creditLine result. If creditLineTrend
+            is true, field is mandatory
+      required:
+      - loanState
+      - keepExistingInstalment
+      - consumerProtectionCode
+      - effectiveInterestDaysMode
+      - worstCaseEIR
+    SpecialAgreementV2:
+      type: object
+      properties:
+        specialAgreement:
+          type: number
+          description: amount of the special agreemnet
+          format: double
+        percSpecialAgreement:
+          type: number
+          description: percentage of the special agreement
+          format: double
+        interestPartCancellation:
+          type: number
+          description: Interest part of canellation
+          format: double
+        startDate:
+          type: string
+          description: Start date of the special agreement
+          format: date
+        endDate:
+          type: string
+          description: End date of the special agreement
+          format: date
+        valueDateInstalment:
+          type: string
+          description: ''
+          format: date
+        occurrence:
+          type: integer
+          description: Number of occurrences
+          format: int32
+        period:
+          type: string
+          description: Periodicity of the special agreement
+        capitalisation:
+          type: boolean
+          description: Flag if capitalisation for interest is done
+          format: boolean
+        agreementType:
+          type: string
+          description: Type of specail agreement
+        untilEndOfTerm:
+          type: boolean
+          description: Flag if the special agreement is valuid until end of term
+          format: boolean
+        ultimo:
+          type: boolean
+          description: Flag if the special agrrement is applied always at ultimo
+          format: boolean
+        directDebit:
+          type: boolean
+          description: Flag if special agreement is invoiced using direct debit
+          format: boolean
+      required:
+      - startDate
+      - period
+      - capitalisation
+      - agreementType
+      - untilEndOfTerm
+      - ultimo
+      - directDebit
+    LoanAmountHeaderV3:
+      type: object
+      properties:
+        loanType:
+          type: string
+          description: Specifies the base type of a loan
+        termType:
+          type: string
+          description: Specifies how the end date of the loan is defined
+        termMonths:
+          type: integer
+          description: Number of months which specifies the term of the loan. See
+            termType
+          format: int32
+        termInstalments:
+          type: integer
+          description: Number of instalments which specifies the term of the loan.
+            See termType
+          format: int32
+        loanEndDate:
+          type: string
+          description: Loan end date, when a fixed date is used. See termType
+          format: date
+        instalment:
+          type: number
+          description: Instalment wihicch is used for calculation of the loan amount
+          format: double
+        residualValue:
+          type: number
+          description: Residual value for calculation
+          format: double
+        interestRate:
+          type: number
+          description: Interest rate for calculation
+          format: double
+        instalmentType:
+          type: string
+          description: Type of instalment calculation
+        interestDaysMode:
+          type: string
+          description: Interest days for the calculation of account closure
+        interestCalcMethod:
+          type: string
+          description: Calculation of interest anticipative or decursive
+        interestCalcPeriod:
+          type: string
+          description: Defines the periodicity of the interest rate
+        instalmentRoundingType:
+          type: string
+          description: Rounding of the instalment
+        instalmentRoundingLimit:
+          type: string
+          description: Rounding limit of the instalment
+        payoutDate:
+          type: string
+          description: Date when the payout takes place
+          format: date
+        repaymentStart:
+          type: string
+          description: Date when the first repayment is done
+          format: date
+        repaymentUltimo:
+          type: boolean
+          description: Repayment always takes place at ultimo
+          format: boolean
+        repaymentPeriod:
+          type: string
+          description: Period of repayment
+        nextSettlementDate:
+          type: string
+          description: Date when the next account settlement takes place. If empty
+            and closing period is 1,2,3 then it is calculated based on payoutDate
+          format: date
+        settlementPeriod:
+          type: string
+          description: Period of interest amortization
+        settlementUltimo:
+          type: boolean
+          description: Settlement of account always takes place at ultimo
+          format: boolean
+        settlementMonth:
+          type: integer
+          description: Number of months when closing takes place, when closing period
+            is reference date
+          format: int32
+        interestCapitalisation:
+          type: boolean
+          description: Flag how to handle interst within an amortization free period
+          format: boolean
+      required:
+      - loanType
+      - termType
+      - instalment
+      - interestRate
+      - instalmentType
+      - interestDaysMode
+      - interestCalcMethod
+      - interestCalcPeriod
+      - instalmentRoundingType
+      - instalmentRoundingLimit
+      - payoutDate
+      - repaymentStart
+      - repaymentUltimo
+      - repaymentPeriod
+      - settlementPeriod
+      - settlementUltimo
+      - interestCapitalisation
+    LoanCalcReturnInfoV2:
+      type: object
+      properties:
+        returnID:
+          type: string
+          description: Error number
+          maxLength: 50
+        returnText:
+          type: string
+          description: Textual error description
+          maxLength: 256
+        returnCategory:
+          type: string
+          description: Category, defines in which area the error occured
+          maxLength: 50
+      required:
+      - returnID
+      - returnText
+      - returnCategory
+    PeriodicFeeFixedAmountV2:
+      type: object
+      properties:
+        periodicFee:
+          type: number
+          description: Amount of the periodic fee
+          format: double
+        name:
+          type: string
+          description: Description of the fee
+          maxLength: 50
+        calcBase:
+          type: string
+          description: Moment when the fee is charged, e.g. per closing
+        period:
+          type: string
+          description: Period in which the fee is charged. If empty, then the closing
+            period of the calculation header is used.
+        effectsEIR:
+          type: boolean
+          description: If true, fee is considered in EIR calculation
+          format: boolean
+        effectsAmortization:
+          type: boolean
+          description: If true, fee is considered in amortization schedule. Usually
+            true, e.g. for Kontokondition false
+          format: boolean
+      required:
+      - periodicFee
+      - calcBase
+      - effectsEIR
+      - effectsAmortization
+  securitySchemes: {
+    }
+paths:
+  /v2/loancalculator:
+    post:
+      operationId: v2_LoanCalculator_calculateFullDetails_calculateLoanAmount
+      parameters: [
+        ]
+      responses:
+        '200':
+          description: Merged operation
+          content:
+            '*/*': {
+              }
+      requestBody:
+        required: false
+        content:
+          application/vnd.at.spardat.loanservices.loancalculator.views.loan.calc.full.input.v2+json:
+            schema:
+              $ref: '#/components/schemas/LoanCalcFullInputV2'
+          application/vnd.at.spardat.loanservices.loancalculator.views.loan.amount.input.v2+json:
+            schema:
+              $ref: '#/components/schemas/LoanAmountInputV2'
+  /loancalculator:
+    post:
+      operationId: LoanCalculator_calculateSimple
+      parameters: [
+        ]
+      responses:
+        '200':
+          description: Description for 200
+          content:
+            application/vnd.at.spardat.loanservices.loancalculator.views.loan.calc.simple.output+json:
+              schema:
+                $ref: '#/components/schemas/LoanCalcSimpleOutput'
+      requestBody:
+        required: true
+        content:
+          application/vnd.at.spardat.loanservices.loancalculator.views.loan.calc.simple.input+json:
+            schema:
+              $ref: '#/components/schemas/LoanCalcSimpleInput'
+  /v3/loancalculator:
+    post:
+      operationId: v3_LoanCalculator_calculateFullDetails_calculateLoanAmount
+      parameters: [
+        ]
+      responses:
+        '200':
+          description: Merged operation
+          content:
+            '*/*': {
+              }
+      requestBody:
+        required: false
+        content:
+          application/vnd.at.spardat.loanservices.loancalculator.views.loan.calc.full.input.v3+json:
+            schema:
+              $ref: '#/components/schemas/LoanCalcFullInputV3'
+          application/vnd.at.spardat.loanservices.loancalculator.views.loan.amount.input.v3+json:
+            schema:
+              $ref: '#/components/schemas/LoanAmountInputV3'
