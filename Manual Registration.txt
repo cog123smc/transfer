@@ -1,0 +1,47 @@
+Manual Registration:
+
+Goal:
+	The implementation will be responsibe for providing a Provider user the capability to manually register their APIs in to 3Scale Developer Portal.
+	The guidance for the process needs to be available in the 'Getting Started' page of Developer Portal.
+	[Is this feature for 3rd Party?]
+	
+Inputs:
+	As prerequisites we need:
+		Details on all the feilds that should be available in Provider's detail form.
+		Inputs for Try-it-Out and pricing in needed.
+		Approval process for the submitted request needs to be determined.
+
+Content:
+	According to planning:
+		1) Design a workflow
+		2) Create API Components just by clicking a button
+		3) Documentation in Confluence
+
+Deliverable:
+	Documentation & Design prototype covering all requirements of Manual Registration.
+	
+Progress Management:
+	1 PD for WP review and finalization
+	1 PD for Documentation
+	x PD for Implementation
+		1) Design a workflow
+		2) Create API Components just by clicking a button
+		3) Documentation in Confluence
+
+Progressive review to be organized by Nagarro folks.
+
+Acceptance:
+	Meeting will be scheduled to show the design prototype/documentation to team (Alex, Sachin, Peter, Walter,Stefan).
+	The same should be approved by the team. 
+	Documentation will also be shared via the mail for the feedback.
+-------------------------------------------------------------------------------------------------------------------------------------------------
+1) Design a workflow
+	Design step-by-step process for the Provider User to fill and add details
+	Attachments, if any, needs to be in particular formats for upload
+	Additional details/requests need to be shared in a free text box
+2) Create API Components just by clicking a button
+	After all the details are provided, with the sublit request a approval process should follow
+	Post approval, the Product with its backend should be provided
+	The Provider User should get the API Gateway link for the provided api
+3) Documentation in Confluence
+	Proper documentation should be made for the end-to-end process
